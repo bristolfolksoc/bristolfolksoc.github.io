@@ -13,8 +13,9 @@ cache:
 script: echo "No tests";
 
 after_success:
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis CI"
+  - node generate.js
+  - git config --global user.email "deploy@travis-ci.org"
+  - git config --global user.name "Deployment Bot"
   - rm .gitignore
   - mv .gitignore-deploy .gitignore
   - git checkout -b master
