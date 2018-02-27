@@ -15,6 +15,8 @@ script: echo "No tests";
 after_success:
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
+  - rm .gitignore
+  - mv .gitignore-deploy .gitignore
   - git checkout -b master
   - git add -A
   - git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
