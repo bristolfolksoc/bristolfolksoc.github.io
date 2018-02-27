@@ -1,16 +1,22 @@
 language: node_js
 node_js:
 - '6'
+
+branches:
+  except:
+    - master
+
 cache:
   directories:
   - node_modules
+
 script: echo "No tests";
-before_deploy:
-  - node generate.js
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: true
-  on:
-    branch: master
+
+after_success:
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "Travis CI"
+  - git checkout -b master
+  - git add -A
+  - git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
+  - git remote add origin-pages https://${GITHUB_TOKEN}@github.com/bristolfolksoc/bristolfolksoc.github.io.git > /dev/null 2>&1
+  - git push --quiet -f origin-pages master

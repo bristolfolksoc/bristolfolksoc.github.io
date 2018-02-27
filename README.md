@@ -2,7 +2,7 @@
 
 [Link to Live Website](https://bristolfolksoc.github.io)
 
-Current Website Build Status: [![Build Status](https://travis-ci.org/bristolfolksoc/bristolfolksoc.github.io.svg?branch=master)](https://travis-ci.org/bristolfolksoc/bristolfolksoc.github.io)
+Current Website Build Status: [![Build Status](https://travis-ci.org/bristolfolksoc/bristolfolksoc.github.io.svg?branch=development)](https://travis-ci.org/bristolfolksoc/bristolfolksoc.github.io)
 
 Source code for a potential website that allows viewing and sharing of folk tunes in ABC notation. This site specifically displays tunes played by the Bristol Univeristy Folk Society and is intended as an online version of the society tunebook rather than a general place to share folk tunes.
 
