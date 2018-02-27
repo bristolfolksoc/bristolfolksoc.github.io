@@ -1,0 +1,16 @@
+{
+  "name": "bristolfolksoc.github.io",
+  "version": "1.0.0",
+  "description": "Source code for a potential website that allows viewing and sharing of folk tunes in ABC notation",
+  "repository": {
+    "type": "git",
+    "url": "https://Nick-Pearson@github.com/bristolfolksoc/bristolfolksoc.github.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bristolfolksoc/bristolfolksoc.github.io/issues"
+  },
+  "homepage": "https://bristolfolksoc.github.io",
+  "dependencies": {
+    "abcjs": "^3.3.4"
+  }
+}
