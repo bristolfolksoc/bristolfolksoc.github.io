@@ -11,6 +11,10 @@
   },
   "homepage": "https://bristolfolksoc.github.io",
   "dependencies": {
-    "abcjs": "^3.3.4"
+    "abcjs": "^3.3.4",
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.1",
+    "mustache": "^2.3.0",
+    "popper.js": "^1.12.9"
   }
 }
