@@ -51,3 +51,9 @@ nav
   margin: 15px 0 30px 0;
   box-shadow: 3px 3px;
 }
+
+.music-container
+{
+  margin-left: 30px;
+  margin-right: 30px;
+}

@@ -23,7 +23,12 @@ function LoadAndRenderTune(filepath, div)
   let xhr = new XMLHttpRequest();
   xhr.open("GET", filepath);
   xhr.onload = function() {
-    ABCJS.renderAbc(div[0], xhr.responseText)
+    ABCJS.renderAbc(div[0], xhr.responseText,
+      { },
+      {
+          staffwidth: div.width() - 30,
+      },
+      { });
   };
 
   xhr.send();

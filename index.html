@@ -96,9 +96,12 @@
                       <div class="music-container"></div>
                     </div>`;
           };
+          let count = 0;
           TuneIndex.forEach(function(tune) {
+            if(count > 50) return;
 						if(!PassesFilter(tune)) return;
 
+            count += 1;
             var title = HighlightText(tune.title, GetFilter());
 						$("#tune-container").append(tuneTemplate(tune, title));
 					});
