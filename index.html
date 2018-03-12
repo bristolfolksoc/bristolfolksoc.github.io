@@ -67,7 +67,7 @@
 
         function OnTuneIndexLoaded()
         {
-          $("#keyword-search").attr("placeholder", "Search " + TuneIndex.length + " Tunes...");
+          $("#keyword-search").attr("placeholder", "Search " + TuneIndex.length + " tunes...");
           UpdateFilteredTunes();
         }
 
@@ -91,8 +91,12 @@
                       <a href="javascript:void(0);" onclick="javascript:LoadAndRenderTune('${tune.filename}', $(this).parent().find('.music-container'))">
                         <button type="button" class="btn btn-outline-primary"><i class="fas fa-music"></i> View Music</button>
                       </a>
-                      <button type="button" class="btn btn-outline-primary btn-favorite"><i class="far fa-heart ico-favorite"></i> Favorite</button>
-                      <button type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Add to Set</button>
+                      <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}'); $(this).addClass('active');">
+                        <button type="button" class="btn btn-outline-primary btn-favorite"><i class="far fa-heart ico-favorite"></i> Favorite</button>
+                      </a>
+                      <a href="javascript:void(0);" onclick="javascript:ToggleTuneInSet('${tune.filename}'); $(this).addClass('active');">
+                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Add to Set</button>
+                      </a>
                       <div class="music-container"></div>
                     </div>`;
           };
