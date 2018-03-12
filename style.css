@@ -1,0 +1,53 @@
+.highlighted-text
+{
+  background-color: #ff0;
+}
+
+.container
+{
+  padding-top: 80px;
+}
+
+body
+{
+  font-family: 'Montserrat', sans-serif;
+  background: #eee;
+}
+
+h1, h2, h3, h4, .navbar-brand
+{
+  font-family: 'Acme', sans-serif;
+}
+
+nav
+{
+  background-color: #ae31ad;
+  color: #fff;
+}
+
+.navbar-brand
+{
+  text-shadow: 2px 2px #000;
+  font-size: 1.5em;
+}
+
+.navbar-shadow
+{
+  position: fixed;
+  z-index: 512;
+  top: 60px;
+  width: 100%;
+  height: 7px;
+  background: repeating-linear-gradient(45deg, #f9d4f6, #f9d4f6 10px, #ef4bff 10px, #ef4bff 20px, #005cff 20px, #005cff 30px, #00ff00 30px, #00ff00 40px, #f5ff07 40px, #f5ff07 50px, #ff302a 50px, #ff302a 60px);
+  box-shadow: 0px 1px 5px #444;
+}
+
+.tune-entry
+{
+  background-color: #fff;
+  border-radius:  5px;
+  border:  thin #000 solid;
+  padding: 5px;
+  margin: 15px 0 30px 0;
+  box-shadow: 3px 3px;
+}

@@ -7,21 +7,42 @@
 		<meta name=description content="Website for the University of Bristol Folk Society managing the online tunebook">
 		<meta name=keywords content="Tune, Folk, Bristol, Society, Session, Univeristy, Student, ABC">
 
-		<title>UoB Folk Society</title>
+		<title>Bristol Univeristy Folk Society</title>
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Acme|Montserrat" rel="stylesheet">
 
 		<link rel="stylesheet" href="./style.css"/>
 	</head>
 	<body>
+    <nav class="navbar fixed-top navbar-dark">
+      <a class="navbar-brand d-none d-sm-block" href="./">Bristol University Folk Society</a>
+      <a class="navbar-brand d-block d-sm-none" href="./">BUFS</a>
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="./favs.html">Favorites</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./set.html">My Set</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="navbar-shadow"></div>
+
 		<div class="container">
 			<noscript>
 				<h2>You must have javascript enabled to use this website</h2>
 			</noscript>
 
-			<h1>Bristol University Folk Society</h1>
-
-			<input class="form-control form-control-lg" type="text" placeholder="Search Tunes">
+			<h1>Full Tunebook</h1>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+  			<input class="form-control form-control-lg" type="text" placeholder="Search all Tunes..." id="keyword-search">
+      </div>
 
 			<div id="tune-container">
 			</div>
@@ -31,20 +52,55 @@
 			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 			<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
-			<script src="./node_modules/mustache/mustache.min.js"></script>
 			<script src="./node_modules/abcjs/bin/abcjs_midi_3.3.4-min.js"></script>
 
 			<script src="./scripts/core.js"></script>
 			<script src="./scripts/index.js"></script>
 			<script>
-				LoadTuneIndex(OnTunesLoaded);
+        window.addEventListener('load', function() {
+  				LoadTuneIndex(OnTuneIndexLoaded);
 
-				function OnTunesLoaded()
+          $("#keyword-search").on('input',function(e){
+            UpdateFilteredTunes();
+          });
+        });
+
+        function OnTuneIndexLoaded()
+        {
+          $("#keyword-search").attr("placeholder", "Search " + TuneIndex.length + " Tunes...");
+          UpdateFilteredTunes();
+        }
+
+        function GetFilter() { return $("#keyword-search").val();}
+
+        // returns true if the tune should be shown based on the search filter
+        function PassesFilter(tune)
+        {
+          return MatchesFilter(tune.title, GetFilter());
+        }
+
+        // update which tunes are shown based on the filter
+				function UpdateFilteredTunes()
 				{
-					TuneIndex.forEach(function(tune) {
-						console.log(tune);
-						var tuneTemplate = "<div class=\"tune-entry\"><h1>{{title}} <i>({{type}})</i></h1><p>{{author}}</p><p><a href=\"javascript:void(0);\" onclick=\"javascript:LoadAndRenderTune(\'{{filename}}\', $(this).parent())\">View Tune</a></div>";
-						$("#tune-container").append(Mustache.to_html(tuneTemplate, tune));
+          $("#tune-container").empty();
+
+          var tuneTemplate = function(tune, title) {
+            return `<div class=\"tune-entry\">
+                      <h1>${title}<i>(${tune.type})</i></h1>
+                      <p>${tune.author}</p>
+                      <a href="javascript:void(0);" onclick="javascript:LoadAndRenderTune('${tune.filename}', $(this).parent().find('.music-container'))">
+                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-music"></i> View Music</button>
+                      </a>
+                      <button type="button" class="btn btn-outline-primary btn-favorite"><i class="far fa-heart ico-favorite"></i> Favorite</button>
+                      <button type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Add to Set</button>
+                      <div class="music-container"></div>
+                    </div>`;
+          };
+          TuneIndex.forEach(function(tune) {
+						if(!PassesFilter(tune)) return;
+
+            var title = HighlightText(tune.title, GetFilter());
+						$("#tune-container").append(tuneTemplate(tune, title));
 					});
 				}
 			</script>
