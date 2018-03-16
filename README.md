@@ -6,9 +6,32 @@ Current Website Build Status: [![Build Status](https://travis-ci.org/bristolfolk
 
 Source code for a potential website that allows viewing and sharing of folk tunes in ABC notation. This site specifically displays tunes played by the Bristol Univeristy Folk Society and is intended as an online version of the society tunebook rather than a general place to share folk tunes.
 
+## Top tunes needing to be digitised
+* New Rigged Ship
+* The Firey Clock Face
+* Dingle Regatta
+* Sweets o' May
+* The Butterfly
+* Foxhunter's Jig
+* New Drops of Brandy
+* Iron Legs
+* Soldier's Joy
+* The Arkansas Traveller
+* Old Joe Clark
+* King of the Fairies
+* The Rights of Man
+* John Ryan's Polka
+* My Love is but a Lassie Yet
+* Bear Dance
+* The Dashing White Segeant
+* Cherkessia Kfula
+* Parson's Farewell
+* Go to Berwick, Johnny
+* Rusty Gully
+
 ## I want to add a tune to the website
 
-Tunes on the website are stored in ABC Notation. This is a way of representing music using text. If your tune is common you may be able to find a version of it already in ABC format on [The Session](www.thesession.org). Otherwise you may need to write the ABC from scratch.
+Tunes on the website are stored in ABC Notation. This is a way of representing music using text. If your tune is common you may be able to find a version of it already in ABC format on [The Session](http://www.thesession.org/). Otherwise you may need to write the ABC from scratch.
 
 ### Preparing your ABC for upload
 * Make sure the ABC is the correct version played at the session, many common tunes can be played differently to published versions you may find online.
