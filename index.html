@@ -14,6 +14,8 @@
 
     <link href="https://fonts.googleapis.com/css?family=Acme|Montserrat" rel="stylesheet">
 
+    <link href="./node_modules/abcjs/abcjs-midi.css" media="all" rel="stylesheet">
+
 		<link rel="stylesheet" href="./style.css"/>
 	</head>
 	<body>
@@ -22,10 +24,7 @@
       <a class="navbar-brand d-block d-sm-none" href="./">BUFS</a>
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="./favs.html">Favorites</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./set.html">My Set</a>
+          <a class="nav-link" href="./set.html">My Set <span class="badge badge-light" id="lbl-num-in-set">0</span></a>
         </li>
       </ul>
     </nav>
@@ -43,9 +42,30 @@
         </div>
   			<input class="form-control form-control-lg" type="text" placeholder="Search all Tunes..." id="keyword-search">
       </div>
+      <a href="javascript:void(0);" onclick="javascript:ToggleAdvancedSearch();" class="lbl-advanced-search"><p><i class="fas fa-caret-down"></i> Advanced Search Options <i class="fas fa-caret-down"></i></p></a>
+      <div id="advanced-search-opts" style="display:none;">
+        <hr/>
+        <p>
+          <label class="switch">
+            <input type="checkbox" id="fav-filter">
+            <span class="slider round"></span>
+          </label>
+           Show only favorited
+        </p>
+        <select class="custom-select" id="composer-select">
+          <option selected>Filter by composer...</option>
+          <option value="Any">Any</option>
+        </select>
+      </div>
+      <hr/>
+
 
 			<div id="tune-container">
 			</div>
+      <div class="no-tunes-found">
+        <h2>No tunes found</h2>
+        <p>Try using a different search filter</p>
+      </div>
 
 			<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -56,61 +76,6 @@
 
 			<script src="./scripts/core.js"></script>
 			<script src="./scripts/index.js"></script>
-			<script>
-        window.addEventListener('load', function() {
-  				LoadTuneIndex(OnTuneIndexLoaded);
-
-          $("#keyword-search").on('input',function(e){
-            UpdateFilteredTunes();
-          });
-        });
-
-        function OnTuneIndexLoaded()
-        {
-          $("#keyword-search").attr("placeholder", "Search " + TuneIndex.length + " tunes...");
-          UpdateFilteredTunes();
-        }
-
-        function GetFilter() { return $("#keyword-search").val();}
-
-        // returns true if the tune should be shown based on the search filter
-        function PassesFilter(tune)
-        {
-          return MatchesFilter(tune.title, GetFilter());
-        }
-
-        // update which tunes are shown based on the filter
-				function UpdateFilteredTunes()
-				{
-          $("#tune-container").empty();
-
-          var tuneTemplate = function(tune, title) {
-            return `<div class=\"tune-entry\">
-                      <h1>${title}<i>(${tune.type})</i></h1>
-                      <p>${tune.author}</p>
-                      <a href="javascript:void(0);" onclick="javascript:LoadAndRenderTune('${tune.filename}', $(this).parent().find('.music-container'))">
-                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-music"></i> View Music</button>
-                      </a>
-                      <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}'); $(this).addClass('active');">
-                        <button type="button" class="btn btn-outline-primary btn-favorite"><i class="far fa-heart ico-favorite"></i> Favorite</button>
-                      </a>
-                      <a href="javascript:void(0);" onclick="javascript:ToggleTuneInSet('${tune.filename}'); $(this).addClass('active');">
-                        <button type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Add to Set</button>
-                      </a>
-                      <div class="music-container"></div>
-                    </div>`;
-          };
-          let count = 0;
-          TuneIndex.forEach(function(tune) {
-            if(count > 50) return;
-						if(!PassesFilter(tune)) return;
-
-            count += 1;
-            var title = HighlightText(tune.title, GetFilter());
-						$("#tune-container").append(tuneTemplate(tune, title));
-					});
-				}
-			</script>
 		</div>
 	</body>
 </html>

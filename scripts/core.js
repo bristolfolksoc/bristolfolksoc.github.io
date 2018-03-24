@@ -1,5 +1,21 @@
 var TuneIndex = null;
 
+// cookie expiry in days
+var CDUR = 365;
+
+var Favorites_CNAME = "fc_favs";
+var Favorites = [];
+
+var CurSet_CNAME = "fc_set";
+var CurSet = [];
+
+function Initialise(callback)
+{
+  LoadFavorites();
+  LoadCurrentSet();
+  LoadTuneIndex(callback);
+}
+
 function LoadTuneIndex(callback)
 {
   if(TuneIndex != null)
@@ -18,6 +34,40 @@ function LoadTuneIndex(callback)
   xhr.send();
 }
 
+function LoadFavorites()
+{
+  var JSONString = GetCookie(Favorites_CNAME);
+
+  if(JSONString == "")
+  {
+    Favorites = [];
+    return;
+  }
+
+  Favorites = JSON.parse(JSONString);
+
+  // if there is a JSON error reset the favorites
+  if(Favorites == null)
+    Favorites = [];
+}
+
+function LoadCurrentSet()
+{
+  var JSONString = GetCookie(CurSet_CNAME);
+
+  if(JSONString == "")
+  {
+    CurSet = [];
+    return;
+  }
+
+  CurSet = JSON.parse(JSONString);
+
+  // if there is a JSON error reset the favorites
+  if(CurSet == null)
+    CurSet = [];
+}
+
 function LoadAndRenderTune(filepath, div)
 {
   let xhr = new XMLHttpRequest();
@@ -29,6 +79,17 @@ function LoadAndRenderTune(filepath, div)
           staffwidth: div.width() - 30,
       },
       { });
+  };
+
+  xhr.send();
+}
+
+function PlayMidiForTune(filepath, div)
+{
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", filepath);
+  xhr.onload = function() {
+    ABCJS.renderMidi(div[0], xhr.responseText);
   };
 
   xhr.send();
@@ -53,6 +114,63 @@ function MatchesFilter(inText, filter)
   });
 
   return result;
+}
+
+function ToggleFavorite(tunefilename)
+{
+  if(IsFavorite(tunefilename))
+  {
+    Favorites.splice(Favorites.indexOf(tunefilename), 1);
+  }
+  else
+  {
+    Favorites.push(tunefilename);
+  }
+
+  SetCookie(Favorites_CNAME, JSON.stringify(Favorites), CDUR);
+}
+
+function IsFavorite(tunefilename)
+{
+  return Favorites.includes(tunefilename);
+}
+
+function AddTuneToSet(tunefilename)
+{
+  CurSet.push(tunefilename);
+
+  SetCookie(CurSet_CNAME, JSON.stringify(CurSet), CDUR);
+}
+
+function IsInSet(tunefilename)
+{
+  return CurSet.includes(tunefilename);
+}
+
+// w3 schools functions
+function SetCookie(cname, cvalue, exdays)
+{
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function GetCookie(cname)
+{
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 function HighlightText(inText, filter)

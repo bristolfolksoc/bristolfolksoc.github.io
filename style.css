@@ -14,14 +14,24 @@ body
   background: #eee;
 }
 
-h1, h2, h3, h4, .navbar-brand
+h1, h2, h3, h4, .navbar-brand, nav
 {
   font-family: 'Acme', sans-serif;
+}
+
+a
+{
+  color: #ae31ad;
 }
 
 nav
 {
   background-color: #ae31ad;
+  color: #fff;
+}
+
+.nav, .nav a
+{
   color: #fff;
 }
 
@@ -48,8 +58,112 @@ nav
   border-radius:  5px;
   border:  thin #000 solid;
   padding: 5px;
-  margin: 15px 0 30px 0;
+  margin: 15px 0 15px 0;
   box-shadow: 3px 3px;
+}
+
+.no-tunes-found
+{
+  text-align: center;
+  display: none;
+}
+
+.active .btn
+{
+  background-color: #ae31ad;
+  color: #fff;
+  box-shadow: 2px 2px #000;
+}
+
+.fav-button svg path
+{
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 50px;
+}
+
+.fav-button.active svg path
+{
+  fill: #F00;
+  stroke: #000;
+  stroke-width: 25px;
+}
+
+.lbl-advanced-search
+{
+  text-align: center;;
+}
+
+.lbl-advanced-search p
+{
+  margin-top: 0.5rem;
+}
+
+.form-control:focus, .custom-select:focus
+{
+  box-shadow: 0 0 .2rem .02rem #ae31ad;
+  border-color: #ae31ad;
+}
+
+/* W3 Schools switch CSS*/
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 20px;
+  margin-bottom: 0;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #ae31ad;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #ae31ad;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 .music-container
