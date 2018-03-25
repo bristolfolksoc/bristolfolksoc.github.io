@@ -5,7 +5,8 @@ R:jig
 Z:Transcribed to abc by Michael Greene, 2007
 G:48 bar jigs
 M:6/8
-Q:180
+L: 1/8
+Q:1/4=180
 K:G
 D|:"G"GAB D2B|"C"c2A "G"BAG|GAB DEG|"D"A3-A2D|\
 "G"GAB D2B|"C"c2A "G"BAG|GAB "D"D2 E|1"G"G3-G2 D:|2"G"G3-G2 A] |
