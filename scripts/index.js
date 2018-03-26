@@ -56,6 +56,9 @@ function UpdateFilteredTunes()
               <a href="javascript:void(0);" onclick="javascript:AddTuneToSet('${tune.filename}'); if(IsInSet('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); } $('#lbl-num-in-set').html(CurSet.length);" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
                 <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
               </a>
+              <a href="${tune.filename}">
+                <button type="button" class="btn btn-outline-dark"><i class="fas fa-download"></i> Download ABC</button>
+              </a>
               <div class="midi-container"></div>
               <div class="music-container"></div>
             </div>`;

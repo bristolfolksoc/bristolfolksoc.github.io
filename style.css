@@ -171,3 +171,8 @@ input:checked + .slider:before {
   margin-left: 30px;
   margin-right: 30px;
 }
+
+.abcjs-inline-midi
+{
+  display: none;
+}

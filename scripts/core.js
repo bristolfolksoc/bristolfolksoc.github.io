@@ -89,7 +89,17 @@ function PlayMidiForTune(filepath, div)
   let xhr = new XMLHttpRequest();
   xhr.open("GET", filepath);
   xhr.onload = function() {
-    ABCJS.renderMidi(div[0], xhr.responseText);
+    ABCJS.renderMidi(div[0], xhr.responseText,
+    {
+        generateDownload: true,
+        downloadLabel: "Download MIDI",
+        inlineControls: {
+            hide: true,
+            startPlaying: true,
+        },
+        startingTune: 0
+    });
+    ABCJS.midi.startPlaying(div[0].firstChild);
   };
 
   xhr.send();
