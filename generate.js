@@ -21,9 +21,6 @@ let GetABCParam = (abc, paramname, defaultValue = "") => {
 
 let ParseTune = (filepath) => {
   return new Promise(function(resolve, reject) {
-    // initialise the object with the default values
-    let obj =
-
     fs.readFile(filepath, (err, data) => {
       if(err)
       {
@@ -85,5 +82,13 @@ function ParseDirectoryRecursvie(dir)
 }
 
 ParseDirectoryRecursvie("./tunes").then((tunes) => {
+  tunes.sort(function(a,b) {
+    if (a.title < b.title)
+      return -1;
+    if (a.title > b.title)
+      return 1;
+    return 0;
+  });
+
   fs.writeFile("./tunes.json", JSON.stringify(tunes), () => {});
 });

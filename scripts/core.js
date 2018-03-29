@@ -84,25 +84,51 @@ function LoadAndRenderTune(filepath, div)
   xhr.send();
 }
 
-function PlayMidiForTune(filepath, div)
+function LoadMidiForTune(filepath, div, callback)
 {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", filepath);
   xhr.onload = function() {
-    ABCJS.renderMidi(div[0], xhr.responseText,
+    ABCJS.renderMidi(div[0], xhr.responseText, {},
     {
-        generateDownload: true,
-        downloadLabel: "Download MIDI",
-        inlineControls: {
-            hide: true,
-            startPlaying: true,
-        },
-        startingTune: 0
+      listener: function (abcjsElement, currentEvent, context) { MidiListenerCallback(abcjsElement, currentEvent, context); },
+      startingTune: 0
     });
-    ABCJS.midi.startPlaying(div[0].firstChild);
+    callback();
   };
 
   xhr.send();
+}
+
+function LoadRawABC(filepath, callback)
+{
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", filepath);
+  xhr.onload = function() {
+    callback(xhr.responseText);
+  };
+
+  xhr.send();
+}
+
+function MidiListenerCallback(abcjsElement, currentEvent, context)
+{
+  // update the progress bar
+  var newWidth = 100 * currentEvent.progress;
+  var container = jQuery(abcjsElement).parent().parent();
+  var pb = container.find(".progress-bar");
+  pb.css("width", newWidth + "%");
+
+  //check if we should be looping
+  if(currentEvent.progress === 1)
+  {
+    if(container.find(".btn-loop").hasClass("active"))
+    {
+      setTimeout(function() {
+        ABCJS.midi.startPlaying(abcjsElement);
+      }, 10);
+    }
+  }
 }
 
 function MatchesFilter(inText, filter)
