@@ -34,7 +34,7 @@ let ParseTune = (filepath) => {
       //parse out tune details
       resolve({
         title: GetABCParam(abc, "T", "Sample Tune"),
-        type: GetABCParam(abc, "R", "jig"),
+        type: GetABCParam(abc, "R", "Jig"),
         author: GetABCParam(abc, "C", "n/a"),
         filename: filepath
       });
