@@ -7,25 +7,25 @@ Current Website Build Status: [![Build Status](https://travis-ci.org/bristolfolk
 Source code for a potential website that allows viewing and sharing of folk tunes in ABC notation. This site specifically displays tunes played by the Bristol Univeristy Folk Society and is intended as an online version of the society tunebook rather than a general place to share folk tunes.
 
 ## Top tunes needing to be digitised
-* New Rigged Ship
-* The Firey Clock Face
-* Dingle Regatta
-* Sweets o' May
-* The Butterfly
-* Foxhunter's Jig
-* New Drops of Brandy
-* Iron Legs
-* Soldier's Joy
-* The Arkansas Traveller
-* Old Joe Clark
-* King of the Fairies
-* The Rights of Man
-* John Ryan's Polka
-* My Love is but a Lassie Yet
-* Bear Dance
-* The Dashing White Segeant
-* Cherkessia Kfula
-* Parson's Farewell
+* ~~New Rigged Ship~~
+* ~~The Firey Clock Face~~
+* ~~Dingle Regatta~~
+* ~~Sweets o' May~~
+* ~~The Butterfly~~
+* ~~Foxhunter's Jig~~
+* ~~New Drops of Brandy~~
+* ~~Iron Legs~~
+* ~~Soldier's Joy~~
+* ~~The Arkansas Traveller~~
+* ~~Old Joe Clark~~
+* ~~King of the Fairies~~
+* ~~The Rights of Man~~
+* ~~John Ryan's Polka~~
+* ~~My Love is but a Lassie Yet~~
+* ~~Bear Dance~~
+* ~~The Dashing White Segeant~~
+* ~~Cherkessia Kfula~~
+* ~~Parson's Farewell~~
 * Go to Berwick, Johnny
 * Rusty Gully
 
