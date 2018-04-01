@@ -2,22 +2,25 @@ window.addEventListener('load', function() {
   Initialise(OnTuneIndexLoaded);
 
   $("#keyword-search").on('input',function(e) {
-    UpdateFilteredTunes();
+    OnSearchFilterChanged();
   });
 
   $("#fav-filter").on('change', function(e) {
-    UpdateFilteredTunes();
+    OnSearchFilterChanged();
   });
 
   $("#composer-select").on('change', function(e) {
-    UpdateFilteredTunes();
+    OnSearchFilterChanged();
   });
 });
 
 function OnTuneIndexLoaded()
 {
-  $("#keyword-search").attr("placeholder", "Search " + TuneIndex.length + " tunes...");
+  $("#keyword-search").attr("placeholder", "Search " + TuneIndex.tunes.length + " tunes...");
   $("#lbl-num-in-set").html(CurSet.length);
+
+  var d = new Date(TuneIndex.genTime);
+  $("#updateTime").html("Last updated " + d.toString());
 
   UpdateComposerList();
   UpdateFilteredTunes();
@@ -34,6 +37,38 @@ function PassesFilter(tune)
   return MatchesFilter(tune.title, GetFilter()) &&
     (!filterFav || IsFavorite(tune.filename)) &&
     (composerFilter == "" || tune.author == composerFilter);
+}
+
+var pageIndex = 0;
+
+function SetPageIndex(newIndex)
+{
+  pageIndex = newIndex;
+  UpdateFilteredTunes();
+}
+
+function PrevPage()
+{
+  SetPageIndex(pageIndex - 1);
+}
+
+function NextPage()
+{
+  SetPageIndex(pageIndex + 1);
+}
+
+var filterChangedTimeout = 0;
+function OnSearchFilterChanged()
+{
+  if(filterChangedTimeout == 0)
+    $("#tune-container").html(`<p class="loading-spinner"><i class="fas fa-spinner fa-2x fa-spin"></i></p>`);
+
+  clearTimeout(filterChangedTimeout);
+  filterChangedTimeout = setTimeout(function() {
+    pageIndex = 0;
+    filterChangedTimeout = 0;
+    UpdateFilteredTunes();
+  }, 500);
 }
 
 // update which tunes are shown based on the filter
@@ -79,13 +114,21 @@ function UpdateFilteredTunes()
             </div>`;
   };
 
-  let count = 0;
-  TuneIndex.forEach(function(tune)
+  var count = 0;
+  var maxperpage = 15;
+  var skip = pageIndex * maxperpage;
+
+  TuneIndex.tunes.forEach(function(tune)
   {
-    if(count > 50) return;
     if(!PassesFilter(tune)) return;
 
     count += 1;
+
+    if(count <= skip || count > skip + maxperpage)
+    {
+      return;
+    }
+
     var title = HighlightText(tune.title, GetFilter());
     $("#tune-container").append(tuneTemplate(tune, title));
   });
@@ -93,10 +136,54 @@ function UpdateFilteredTunes()
   if(count == 0)
   {
     $(".no-tunes-found").show();
+    $(".tune-pagination").hide();
   }
   else
   {
     $(".no-tunes-found").hide();
+
+    $(".tune-pagination").show();
+    $(".tune-pagination .page-count").html("Showing " + (skip + 1) + " - " + Math.min(skip+maxperpage, count) + " of " + count);
+    var pages = $(".tune-pagination .pagination");
+    if(count <= maxperpage)
+    {
+      pages.hide();
+    }
+    else
+    {
+      pages.show();
+      pages.html("");
+
+      if(skip != 0)
+      {
+        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:PrevPage();">Previous</a></li>`);
+      }
+      else
+      {
+        pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>`);
+      }
+
+      for(var i = 0; i < Math.ceil(count / maxperpage); i = i + 1)
+      {
+        if(i == pageIndex)
+        {
+          pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">${i+1}</a></li>`);
+        }
+        else
+        {
+          pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:SetPageIndex(${i});">${i+1}</a></li>`);
+        }
+      }
+
+      if(skip + maxperpage < count)
+      {
+        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:NextPage();">Next</a></li>`);
+      }
+      else
+      {
+        pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>`);
+      }
+    }
   }
 }
 
@@ -111,7 +198,7 @@ function UpdateComposerList()
 
   var uniqueComposers = [];
 
-  TuneIndex.forEach(function(tune)
+  TuneIndex.tunes.forEach(function(tune)
   {
     if(uniqueComposers.includes(tune.author))
       return;

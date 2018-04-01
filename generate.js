@@ -89,6 +89,10 @@ ParseDirectoryRecursvie("./tunes").then((tunes) => {
       return 1;
     return 0;
   });
-
-  fs.writeFile("./tunes.json", JSON.stringify(tunes), () => {});
+  
+  let obj = {
+    genTime: Date.now(),
+    tunes: tunes
+  };
+  fs.writeFile("./tunes.json", JSON.stringify(obj), () => {});
 });

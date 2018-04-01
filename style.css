@@ -19,12 +19,12 @@ h1, h2, h3, h4, .navbar-brand, nav
   font-family: 'Acme', sans-serif;
 }
 
-a
+a, .page-link
 {
   color: #ae31ad;
 }
 
-nav
+.navbar
 {
   background-color: #ae31ad;
   color: #fff;
@@ -92,6 +92,38 @@ nav
 {
   text-align: center;
   display: none;
+}
+
+.meta-bottom
+{
+  font-size: 14px;
+}
+
+.text.meta-top tspan
+{
+  font-style: italic;
+}
+
+.tune-pagination
+{
+  display: flex;
+}
+
+.tune-pagination nav
+{
+  flex-grow: 5;
+}
+
+.discrete
+{
+  color: #666;
+  padding-top: 7px;
+  padding-left: 10px;
+}
+
+.loading-spinner
+{
+  text-align: center;
 }
 
 .active .btn
