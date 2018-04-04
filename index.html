@@ -1,110 +1,21 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-		<meta name=description content="Website for the University of Bristol Folk Society managing the online tunebook">
-		<meta name=keywords content="Tune, Folk, Bristol, Society, Session, Univeristy, Student, ABC">
-
-		<title>Bristol Univeristy Folk Society</title>
-
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-    <link href="https://fonts.googleapis.com/css?family=Acme|Montserrat" rel="stylesheet">
-
-    <link href="./node_modules/abcjs/abcjs-midi.css" media="all" rel="stylesheet">
-
-		<link rel="stylesheet" href="./style.css"/>
-	</head>
-	<body>
-    <nav class="navbar fixed-top navbar-dark">
-      <a class="navbar-brand d-none d-sm-block" href="./">Bristol University Folk Society</a>
-      <a class="navbar-brand d-block d-sm-none" href="./">BUFS</a>
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" href="./set.html">My Set <span class="badge badge-light" id="lbl-num-in-set">0</span></a>
-        </li>
-      </ul>
-    </nav>
-    <div class="navbar-shadow"></div>
-
-		<div class="container">
-			<noscript>
-				<h2>You must have javascript enabled to use this website</h2>
-			</noscript>
-
-			<h1>Full Tunebook</h1>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"><i class="fas fa-search"></i></span>
-        </div>
-  			<input class="form-control form-control-lg" type="text" placeholder="Search all Tunes..." id="keyword-search">
-      </div>
-      <a href="javascript:void(0);" onclick="javascript:ToggleAdvancedSearch();" class="lbl-advanced-search"><p><i class="fas fa-caret-down"></i> Advanced Search Options <i class="fas fa-caret-down"></i></p></a>
-      <div id="advanced-search-opts" style="display:none;">
-        <hr/>
-        <p>
-          <label class="switch">
-            <input type="checkbox" id="fav-filter">
-            <span class="slider round"></span>
-          </label>
-           Show only favorited
-        </p>
-        <select class="custom-select" id="composer-select">
-          <option selected>Filter by composer...</option>
-          <option value="Any">Any</option>
-        </select>
-      </div>
-
-      <hr/>
-
-			<nav class="tune-pagination">
-			  <ul class="pagination">
-			    <li class="page-item disabled">
-			      <a class="page-link" href="#" tabindex="-1">1</a>
-			    </li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			  </ul>
-				<span class="discrete page-count">Showing ? - ? of ?</span>
-				<span class="discrete" id="updateTime" style="text-align:right;flex-grow:5;"></span>
-			</nav>
-
-
-			<hr/>
-
-			<div id="tune-container">
-				<p class="loading-spinner"><i class="fas fa-spinner fa-2x fa-spin"></i></p>
-			</div>
-      <div class="no-tunes-found">
-        <h2>No tunes found</h2>
-        <p>Try using a different search filter</p>
-      </div>
-
-			<hr/>
-
-			<nav class="tune-pagination">
-			  <ul class="pagination">
-			    <li class="page-item disabled">
-			      <a class="page-link" href="#" tabindex="-1">1</a>
-			    </li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			  </ul>
-				<span class="discrete page-count">Showing ? - ? of ?</span>
-			</nav>
-
-			<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-			<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-			<script src="./node_modules/abcjs/bin/abcjs_midi_3.3.4-min.js"></script>
-
-			<script src="./scripts/core.js"></script>
-			<script src="./scripts/index.js"></script>
-		</div>
-	</body>
-</html>
+---
+layout: default
+---
+<h1>Welcome to the Bristol University Folk Society online tunebook</h1>
+<p>
+  This website hosts the tunes commonly played by the society, it is currently in development. You can help by testing the site, contributing tunes and reporting any bugs you find.
+</p>
+<p><a href="tunes.html">View the tunebook</a></p>
+<p>
+  For more information on our society please visit our website at <a href="https://ragmorris.com/" target="_blank">ragmorris.com <i class="fas fa-external-link-alt"></i></a>. If you would like to find out the details of what we do, take part in our activities or book us for your event then get in touch with us…
+</p>
+<p>For morris dancing and general inquiries:</p>
+<ul>
+  <li>Email - <a href="mailto:bag@ragmorris.com" target="_blank">bag@ragmorris.com</a></li>
+  <li>or visit our <a href="https://www.facebook.com/RagMorris/" target="_blank">Facebook Page <i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>For our Folk Club activities (sessions, ceildihs etc.):</p>
+<ul>
+  <li>Email - <a href="mailto:folkclub@ragmorris.com" target="_blank">folkclub@ragmorris.com</a></li>
+  <li>or visit our <a href="https://www.facebook.com/groups/1414730395426978" target="_blank">Facebook Group <i class="fas fa-external-link-alt"></i></a></li>
+</ul>

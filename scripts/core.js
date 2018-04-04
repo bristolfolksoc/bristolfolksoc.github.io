@@ -242,3 +242,8 @@ function HighlightText_recursive(inText, filters)
 
   return inText.substr(0,lowestIdx) + "<span class=\"highlighted-text\">" + inText.substr(lowestIdx, lowestMatch.length) + "</span>" + HighlightText_recursive(inText.substr(lowestIdx + lowestMatch.length), filters);
 }
+
+function GetTuneData(filename)
+{
+  return TuneIndex.tunes.find(function(tune) { return tune.filename == filename; })
+}

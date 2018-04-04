@@ -8,10 +8,18 @@
   padding-top: 80px;
 }
 
-body
+.outer-container
+{
+  min-height: 100%;
+  position: relative;
+  padding-bottom: 60px;
+}
+
+html, body
 {
   font-family: 'Montserrat', sans-serif;
   background: #eee;
+  height: 100%;
 }
 
 h1, h2, h3, h4, .navbar-brand, nav
@@ -22,6 +30,22 @@ h1, h2, h3, h4, .navbar-brand, nav
 a, .page-link
 {
   color: #ae31ad;
+}
+
+footer
+{
+  background-color: #fff;
+  border-top: thin solid #888;
+  color: #888;
+  padding: 10px;
+  width: 100%;
+  margin-top: -45px;
+}
+
+footer a
+{
+  color: #444;
+  font-weight: bold;
 }
 
 .navbar
@@ -86,6 +110,17 @@ a, .page-link
 {
   background-color: #ae31ad;
   transition: none;
+}
+
+.setlist-title
+{
+  padding: 0 10px 0 10px;
+  flex-grow: 5;
+}
+
+.setlist-item
+{
+  display: flex;
 }
 
 .no-tunes-found

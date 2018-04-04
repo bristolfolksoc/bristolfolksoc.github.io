@@ -17,7 +17,9 @@ window.addEventListener('load', function() {
 function OnTuneIndexLoaded()
 {
   $("#keyword-search").attr("placeholder", "Search " + TuneIndex.tunes.length + " tunes...");
+  
   $("#lbl-num-in-set").html(CurSet.length);
+  $("#lbl-num-in-set").show();
 
   var d = new Date(TuneIndex.genTime);
   $("#updateTime").html("Last updated " + d.toString());

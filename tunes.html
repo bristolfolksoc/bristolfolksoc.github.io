@@ -1,0 +1,65 @@
+---
+layout: default
+---
+<h1>Full Tunebook</h1>
+<div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-search"></i></span>
+  </div>
+	<input class="form-control form-control-lg" type="text" placeholder="Search all Tunes..." id="keyword-search">
+</div>
+<a href="javascript:void(0);" onclick="javascript:ToggleAdvancedSearch();" class="lbl-advanced-search"><p><i class="fas fa-caret-down"></i> Advanced Search Options <i class="fas fa-caret-down"></i></p></a>
+<div id="advanced-search-opts" style="display:none;">
+  <hr/>
+  <p>
+    <label class="switch">
+      <input type="checkbox" id="fav-filter">
+      <span class="slider round"></span>
+    </label>
+     Show only favorited
+  </p>
+  <select class="custom-select" id="composer-select">
+    <option selected>Filter by composer...</option>
+    <option value="Any">Any</option>
+  </select>
+</div>
+
+<hr/>
+
+<nav class="tune-pagination">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1">1</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+  </ul>
+	<span class="discrete page-count">Showing ? - ? of ?</span>
+	<span class="discrete" id="updateTime" style="text-align:right;flex-grow:5;"></span>
+</nav>
+
+
+<hr/>
+
+<div id="tune-container">
+	<p class="loading-spinner"><i class="fas fa-spinner fa-2x fa-spin"></i></p>
+</div>
+<div class="no-tunes-found">
+  <h2>No tunes found</h2>
+  <p>Try using a different search filter</p>
+</div>
+
+<hr/>
+
+<nav class="tune-pagination">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1">1</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+  </ul>
+	<span class="discrete page-count">Showing ? - ? of ?</span>
+</nav>
+
+<script src="./scripts/tunes.js"></script>
