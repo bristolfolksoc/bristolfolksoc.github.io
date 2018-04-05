@@ -17,7 +17,7 @@ window.addEventListener('load', function() {
 function OnTuneIndexLoaded()
 {
   $("#keyword-search").attr("placeholder", "Search " + TuneIndex.tunes.length + " tunes...");
-  
+
   $("#lbl-num-in-set").html(CurSet.length);
   $("#lbl-num-in-set").show();
 
@@ -88,7 +88,7 @@ function UpdateFilteredTunes()
                 <button type="button" class="btn btn-outline-dark"><i class="fas fa-headphones"></i> Play MIDI</button>
               </a>
               <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}');  if(IsFavorite('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); }" class="fav-button ${IsFavorite(tune.filename) ? "active" : ""}">
-                <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> Favorite</button>
+                <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> Favourite</button>
               </a>
               <a href="javascript:void(0);" onclick="javascript:AddTuneToSet('${tune.filename}'); if(IsInSet('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); } $('#lbl-num-in-set').html(CurSet.length);" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
                 <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
