@@ -4,30 +4,17 @@
 
 Current Website Build Status: [![Build Status](https://travis-ci.org/bristolfolksoc/bristolfolksoc.github.io.svg?branch=development)](https://travis-ci.org/bristolfolksoc/bristolfolksoc.github.io)
 
-Source code for a potential website that allows viewing and sharing of folk tunes in ABC notation. This site specifically displays tunes played by the Bristol Univeristy Folk Society and is intended as an online version of the society tunebook rather than a general place to share folk tunes.
+Source code for a potential website that allows viewing and sharing of folk tunes in ABC notation. This site specifically displays tunes played by the Bristol University Folk Society and is intended as an online version of the society tunebook rather than a general place to share folk tunes.
 
-## Top tunes needing to be digitised
-* ~~New Rigged Ship~~
-* ~~The Firey Clock Face~~
-* ~~Dingle Regatta~~
-* ~~Sweets o' May~~
-* ~~The Butterfly~~
-* ~~Foxhunter's Jig~~
-* ~~New Drops of Brandy~~
-* ~~Iron Legs~~
-* ~~Soldier's Joy~~
-* ~~The Arkansas Traveller~~
-* ~~Old Joe Clark~~
-* ~~King of the Fairies~~
-* ~~The Rights of Man~~
-* ~~John Ryan's Polka~~
-* ~~My Love is but a Lassie Yet~~
-* ~~Bear Dance~~
-* ~~The Dashing White Segeant~~
-* ~~Cherkessia Kfula~~
-* ~~Parson's Farewell~~
-* Go to Berwick, Johnny
-* Rusty Gully
+## Features in Progress
+* Custom set (with option to modify order, number of repeats and view sheet music)
+* Search tunes by origin
+* Tune collections/groups (dance tunes, beginner tunes etc.)
+* Predefined tune sets
+* Page explaining different tune types (e.g. Swung Hornpipes vs. Unswung)
+* Configuring the MIDI player to use a different voice and have options to vary playback speed
+* Transcribing tunes to other commonly played keys
+* Generate a printable PDF tunebook from a set of tunes
 
 ## I want to add a tune to the website
 
@@ -40,6 +27,11 @@ Tunes on the website are stored in ABC Notation. This is a way of representing m
 
 Once the ABC is created and looks correct, create a new file in the __tunes__ folder with the file extension _.abc_. The easist way to do this is to copy and paste an existing file in the folder. Name the file something appropriate and open in in a Text editor (Notepad if you use Windows, Emacs for Mac etc.) and paste your ABC code here. When you push the tune it will automatically be scanned and added to the list of tunes.
 
-### Helpful Links
+### External Links
 * [Live ABC Preview](https://abcjs.net/abcjs-editor.html): Edit the ABC data and preview the printed music in real time. This is the exact renderer used on the website so if it looks correct on this page it will look correct on the website.
 * [ABC Cheatsheet](http://www.stephenmerrony.co.uk/uploads/ABCquickRefv0_6.pdf): List of all the various ABC codes you can use.
+* [ABC Standard v2.1](http://abcnotation.com/wiki/abc:standard:v2.1)
+* [Steve Mansfield's ABC Tutorial](http://www.lesession.co.uk/abc/abc_notation.htm)
+* [John Chamber's ABC Primer](http://abcnotation.com/wiki/abc:standard:v2.1)
+* [John Chamber's ABC Tutorial](http://trillian.mit.edu/~jc/music/abc/doc/ABCtutorial.html)
+* [Jens Wollschläger's ABC Transposer](http://www.franziskaludwig.de/abctransposer/)
