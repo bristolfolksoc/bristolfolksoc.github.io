@@ -9,11 +9,23 @@ var Favorites = [];
 var CurSet_CNAME = "fc_set";
 var CurSet = [];
 
+function DefaultSettings()
+{
+  return {
+    cookiesEnabled: false
+  };
+}
+
+var Settings_CNAME = "fc_settings";
+var Settings = DefaultSettings();
+
 function Initialise(callback)
 {
   LoadFavorites();
   LoadCurrentSet();
+  LoadSettings();
   LoadTuneIndex(callback);
+  SetupModals();
 }
 
 function LoadTuneIndex(callback)
@@ -66,6 +78,31 @@ function LoadCurrentSet()
   // if there is a JSON error reset the favorites
   if(CurSet == null)
     CurSet = [];
+}
+
+function LoadSettings()
+{
+  var JSONString = GetCookie(Settings_CNAME);
+
+  if(JSONString == "")
+  {
+    return;
+  }
+
+  LoadedSettings = JSON.parse(JSONString);
+
+  // if there is a JSON error reset the favorites
+  if(LoadedSettings != null)
+    Settings = LoadedSettings;
+}
+
+function SetupModals()
+{
+  $('#cookiesModal').on('show.bs.modal', function (event) {
+    Settings.cookiesEnabled = true;
+
+    SetCookie(Settings_CNAME, JSON.stringify(Settings), CDUR);
+  });
 }
 
 function LoadAndRenderTune(filepath, div)
@@ -186,10 +223,16 @@ function IsInSet(tunefilename)
 // w3 schools functions
 function SetCookie(cname, cvalue, exdays)
 {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  if(!Settings.cookiesEnabled)
+  {
+    $('#cookiesModal').modal('show');
+    return;
+  }
+
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function GetCookie(cname)
