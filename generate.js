@@ -35,7 +35,7 @@ let ParseTune = (filepath) => {
       resolve({
         title: GetABCParam(abc, "T", "Sample Tune"),
         type: GetABCParam(abc, "R", "Jig"),
-        author: GetABCParam(abc, "C", "n/a"),
+        author: GetABCParam(abc, "C", "Anon."),
         filename: filepath
       });
     });
@@ -89,7 +89,7 @@ ParseDirectoryRecursvie("./tunes").then((tunes) => {
       return 1;
     return 0;
   });
-  
+
   let obj = {
     genTime: Date.now(),
     tunes: tunes
