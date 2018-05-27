@@ -93,9 +93,17 @@ function UpdateFilteredTunes()
               <a href="javascript:void(0);" onclick="javascript:AddTuneToSet('${tune.filename}'); if(IsInSet('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); } $('#lbl-num-in-set').html(CurSet.length);" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
                 <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
               </a>
-              <a href="javascript:void(0);" onclick="javascript:ViewABCClicked('${tune.filename}', $(this));">
-                <button type="button" class="btn btn-outline-dark"><i class="fas fa-download"></i> View ABC</button>
-              </a>
+              <div class="dropdown">
+                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:ViewABCClicked('${tune.filename}', $(this));">
+                    <i class="fas fa-download"></i> Show ABC
+                  </a>
+                  <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:OpenPDFModal(['${tune.filename}']);">
+                    <i class="fas fa-file-pdf"></i> Create Printout
+                  </a>
+                </div>
+              </div>
               <div class="abc-container" style="display:none">Loading...</div>
               <div class="midi-container" onload="javascript:$this.hide()">
                 <div class="midi-container-hidden"></div>
@@ -217,15 +225,17 @@ function ToggleAdvancedSearch()
 
 function ViewMusicClicked(abc, button)
 {
+  let musicContainer = button.parent().find('.music-container');
+
   if(!button.hasClass('active'))
   {
-    LoadAndRenderTune(abc, button.parent().find('.music-container'));
-    button.parent().find('.music-container').slideDown();
+    LoadAndRenderTune(abc, musicContainer);
+    musicContainer.slideDown();
     button.addClass('active');
   }
   else
   {
-    button.parent().find('.music-container').slideUp();
+    musicContainer.slideUp();
     button.removeClass('active');
   }
 }
@@ -254,26 +264,27 @@ function PlayMIDIClicked(abc, button)
 
 function ViewABCClicked(abc, button)
 {
+  let abcContainer = button.parent().parent().parent().find('.music-container');
+
   if(!button.hasClass('active'))
   {
     button.addClass('active');
     LoadRawABC(abc, function(abctext) {
       var lines = abctext.split('\n');
-      var container = button.parent().find(".abc-container");
       var html = "";
 
       lines.forEach(function(line, idx) {
         html = html + line + "<br/>";
       });
 
-      container.html("<p>" + html + "<p>");
-      container.slideDown();
+      abcContainer.html("<p>" + html + "<p>");
+      abcContainer.slideDown();
     });
   }
   else
   {
     button.removeClass('active');
-    button.parent().find(".abc-container").slideUp();
+    abcContainer.slideUp();
   }
 }
 

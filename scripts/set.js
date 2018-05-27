@@ -23,4 +23,9 @@ function OnTuneIndexLoaded()
 
     setlist.append(setTemplate(tuneData));
   });
+
+  if(CurSet.length == 0)
+  {
+    $(".no-tunes-found").show();
+  }
 }

@@ -220,6 +220,217 @@ function IsInSet(tunefilename)
   return CurSet.includes(tunefilename);
 }
 
+var PDFNoteSize = 0.5;
+var PDFTopMargin = 50;
+var PDFLeftMargin = 50;
+var PDFTunes = [];
+
+var PDFReOrder = false;
+var PDFIncludePageNumbers = false;
+
+function OpenPDFModal(tunes)
+{
+  PDFTunes = tunes;
+  $('#pdfModal').modal('show');
+
+  var reOrderButton = $("#pdf-best-fit").parent();
+
+  if(tunes.length == 1)
+    reOrderButton.hide()
+  else
+    reOrderButton.show();
+
+  OnPDFSettingChanged();
+}
+
+function OnPDFSettingChanged()
+{
+  // reset from previous version
+  $('#btn-view-pdf button').html("<i class=\"fas fa-spinner fa-spin\"></i>");
+  $('#btn-view-pdf').attr("href", "javascript:void(0);");
+
+  PDFReOrder = $("#pdf-best-fit").is(":checked");
+  PDFIncludePageNumbers = $("#pdf-include-pnumbers").is(":checked");
+
+  CreatePDF(PDFTunes, function(url) {
+    $('#btn-view-pdf button').html("View PDF File");
+    $('#btn-view-pdf').attr("href", url);
+  });
+}
+
+function CreatePDF(tunes, callback)
+{
+  var remainingTunes = tunes.length;
+
+  var tuneData = [];
+
+  tunes.forEach(function(tune, index) {
+    tuneData.push({
+      path: tune,
+      abc: ''
+    });
+
+    LoadRawABC(tune, function(abc) {
+      tuneData[index].abc = abc;
+
+      //create a fake element and create the SVG inside of it
+      tuneData[index].svg = document.createElement("div");
+      document.body.appendChild(tuneData[index].svg);
+      ABCJS.renderAbc(tuneData[index].svg, abc,
+        { },
+        {
+            staffwidth: 500 / PDFNoteSize,
+        },
+        { });
+
+      remainingTunes--;
+
+      if(remainingTunes == 0)
+      {
+        CreatePDFFromTuneData(tuneData, callback);
+
+        //clean up the created elements
+        tuneData.forEach(function(data) {
+          document.body.removeChild(data.svg);
+        });
+      }
+    });
+  });
+}
+
+function CreatePDFFromTuneData(tuneData, callback)
+{
+  // create a document and pipe to a blob
+  var doc = new PDFDocument({autoFirstPage:false});
+  var stream = doc.pipe(blobStream());
+
+  if(PDFIncludePageNumbers)
+  {
+    var pageNumber = 0;
+    doc.on('pageAdded',
+      function(){
+        // Don't forget the reset the font family, size & color if needed
+        doc.font('Times-Roman').text(++pageNumber, 0.5 * doc.page.width, doc.page.height - 70, {lineBreak: false});
+      }
+    );
+  }
+  doc.addPage();
+
+  let yOffset = PDFTopMargin;
+  tuneData.forEach(function(data) {
+    AddSVGToPDFDocument(doc, data.svg.children[0], yOffset);
+    yOffset += (data.svg.clientHeight * PDFNoteSize);
+  });
+
+  // end and display the document in the iframe to the right
+  doc.end();
+  stream.on('finish', function() {
+    callback(stream.toBlobURL('application/pdf'));
+  });
+}
+
+function AddSVGToPDFDocument(doc, svg, yOffset)
+{
+  //parse out the element type, and render if required
+  if(svg.tagName == "text")
+  {
+    AddSVGTextToPDFDocument(doc, svg, yOffset);
+  }
+  else if(svg.tagName == "path")
+  {
+    AddSVGPathToPDFDocument(doc, svg, yOffset);
+  }
+  // Add more renderable SVG elements here as required
+
+  for(let i = 0; i < svg.children.length; ++i)
+  {
+    AddSVGToPDFDocument(doc, svg.children[i], yOffset);
+  }
+}
+
+// PDF Render functions
+function AddSVGTextToPDFDocument(doc, text, yOffset)
+{
+  let textVal = text.textContent;
+  let x = (text.getAttribute("x") * PDFNoteSize) + PDFLeftMargin;
+  let y = (text.getAttribute("y") * PDFNoteSize) + yOffset;
+  let font = "Helvetica";
+  let size = 14;
+  let isBold = false;
+  let isItalic = false;
+
+  if(text.hasAttribute("font-style"))
+  {
+    let fontStyle = text.getAttribute("font-style");
+
+    isBold = fontStyle.includes("bold");
+    isItalic = fontStyle.includes("italic");
+  }
+
+  if(text.hasAttribute("font-family"))
+  {
+    let fontFam = text.getAttribute("font-family");
+
+    if(fontFam == "\"Times New Roman\"")
+    {
+      font = "Times-" + (isBold ? "Bold" : "") + (isItalic ? "Italic" : "") + (!isBold && !isItalic ? "Roman" : "");
+    }
+    else
+    {
+      font = (!isBold && !isItalic ? "Helvetica" : ("Helvetica-" + (isBold ? "Bold" : "") + (isItalic ? "Oblique" : "")));
+    }
+  }
+
+  if(text.hasAttribute("font-size"))
+  {
+    //hacccky
+    let fontSize = text.getAttribute("font-size");
+    size = parseInt(fontSize.replace("px", "")) * PDFNoteSize;
+  }
+
+  if(text.hasAttribute("text-anchor"))
+  {
+    let fontAnchor = text.getAttribute("text-anchor");
+    let textLength = text.getBBox().width * PDFNoteSize;
+
+    if(fontAnchor == "end")
+    {
+      x -= textLength;
+    }
+    else if(fontAnchor == "middle")
+    {
+      x -= (textLength * 0.5);
+    }
+  }
+
+  doc.font(font, size).text(textVal, x, y, {lineBreak: false});
+}
+
+function AddSVGPathToPDFDocument(doc, path, yOffset)
+{
+  let d = path.getAttribute("d");
+  let fillOpacity = path.getAttribute("fill-opacity");
+  let fill = path.getAttribute("fill");
+
+  // nothing to draw
+  if(fillOpacity == "0") return;
+
+  doc.save()
+    .translate(PDFLeftMargin, yOffset + 5)
+    .scale(PDFNoteSize)
+    .path(d);
+
+  if(path.hasAttribute("fill-opacity"))
+  {
+    doc.fillOpacity(parseFloat(fillOpacity));
+  }
+
+  if(path.hasAttribute("fill") && fill != "none")
+    doc.fill(fill);
+
+  doc.restore();
+}
+
 // w3 schools functions
 function SetCookie(cname, cvalue, exdays)
 {

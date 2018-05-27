@@ -162,6 +162,21 @@ footer a
   text-align: center;
 }
 
+.dropdown
+{
+  display: inline;
+}
+
+.dropdown-toggle::after
+{
+  display: none;
+}
+
+.dropdown-menu.show
+{
+  box-shadow: 1px 1px 10px #000000;
+}
+
 .active .btn
 {
   background-color: #ae31ad;
