@@ -90,7 +90,7 @@ function UpdateFilteredTunes()
               <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}');  if(IsFavorite('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); }" class="fav-button ${IsFavorite(tune.filename) ? "active" : ""}">
                 <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> Favourite</button>
               </a>
-              <a href="javascript:void(0);" onclick="javascript:AddTuneToSet('${tune.filename}'); if(IsInSet('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); } $('#lbl-num-in-set').html(CurSet.length);" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
+              <a href="javascript:void(0);" onclick="javascript:AddToSetClicked('${tune.filename}', $(this));" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
                 <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
               </a>
               <div class="dropdown">
@@ -286,6 +286,22 @@ function ViewABCClicked(abc, button)
     button.removeClass('active');
     abcContainer.slideUp();
   }
+}
+
+function AddToSetClicked(tune, button)
+{
+  if(IsInSet(tune))
+  {
+    RemoveTuneFromSet(tune);
+    button.removeClass('active');
+  }
+  else
+  {
+    AddTuneToSet(tune);
+    button.addClass('active');
+  }
+
+  $('#lbl-num-in-set').html(CurSet.length);
 }
 
 function SetLooping(button)

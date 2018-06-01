@@ -122,6 +122,31 @@ footer a
 .setlist-item
 {
   display: flex;
+  cursor: -webkit-grab; cursor: grab;
+}
+
+.setlist-item.grabbed
+{
+  cursor: -webkit-grabbing; cursor: grabbing;
+  margin-left: -20px;
+  margin-right: 20px;
+}
+
+.setlist-remove
+{
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  padding: 12px  20px  12px  2em;
+  margin: -12px -20px -12px -2em;
+  color: #212529;
+}
+
+.setlist-remove:hover
+{
+  background-color: #ddd;
+  color: #000;
 }
 
 .no-tunes-found

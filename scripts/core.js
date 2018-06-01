@@ -189,6 +189,30 @@ function MatchesFilter(inText, filter)
   return result;
 }
 
+function SetABCHeader(abc, header, value)
+{
+  let lines = abc.split('\n');
+  let outABC = "";
+  let found = false;
+
+  lines.forEach(function(line) {
+    let newLine = line;
+
+    if(line.startsWith(header))
+    {
+      newLine = header + ":" + value;
+      found = true;
+    }
+
+    if(outABC != "")
+      outABC += "\n";
+
+    outABC += newLine;
+  });
+
+  return outABC;
+}
+
 function ToggleFavorite(tunefilename)
 {
   if(IsFavorite(tunefilename))
@@ -210,7 +234,20 @@ function IsFavorite(tunefilename)
 
 function AddTuneToSet(tunefilename)
 {
+  if(IsInSet(tunefilename)) return;
+
   CurSet.push(tunefilename);
+
+  SetCookie(CurSet_CNAME, JSON.stringify(CurSet), CDUR);
+}
+
+function RemoveTuneFromSet(tunefilename)
+{
+  let idx = CurSet.indexOf(tunefilename);
+
+  if(idx == -1) return;
+
+  CurSet.splice(idx, 1);
 
   SetCookie(CurSet_CNAME, JSON.stringify(CurSet), CDUR);
 }
