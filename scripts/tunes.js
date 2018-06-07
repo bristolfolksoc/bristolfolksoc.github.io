@@ -202,19 +202,33 @@ function UpdateComposerList()
   $("#composer-select").empty();
   $("#composer-select").append("<option value=\"\" selected>Filter by composer...</option>");
 
-  var composerLITemplate = function(composername) {
-    return `<option value="${composername}">${composername}</option>`;
+  var composerLITemplate = function(composername, count) {
+    return `<option value="${composername}">${composername} (${count})</option>`;
   }
 
   var uniqueComposers = [];
 
   TuneIndex.tunes.forEach(function(tune)
   {
-    if(uniqueComposers.includes(tune.author))
-      return;
+    let idx = uniqueComposers.findIndex(function(composer) {
+      return composer[0].trim() == tune.author.trim();
+    });
 
-    uniqueComposers.push(tune.author);
-    $("#composer-select").append(composerLITemplate(tune.author));
+    if(idx != -1)
+    {
+      uniqueComposers[idx][1] += 1;
+      return;
+    }
+
+    uniqueComposers.push([tune.author, 1]);
+  });
+
+  uniqueComposers.sort(function(a,b) {
+    return a[0] > b[0];
+  });
+
+  uniqueComposers.forEach(function(composer) {
+    $("#composer-select").append(composerLITemplate(composer[0], composer[1]));
   });
 }
 
