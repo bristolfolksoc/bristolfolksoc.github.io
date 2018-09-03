@@ -122,19 +122,10 @@ footer a
 .setlist-item
 {
   display: flex;
-  cursor: -webkit-grab; cursor: grab;
-}
-
-.setlist-item.grabbed
-{
-  cursor: -webkit-grabbing; cursor: grabbing;
-  margin-left: -20px;
-  margin-right: 20px;
 }
 
 .setlist-remove
 {
-  cursor: pointer;
   display: inline-block;
   position: relative;
   z-index: 1;

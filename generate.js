@@ -19,6 +19,10 @@ let GetABCParam = (abc, paramname, defaultValue = "") => {
   return value;
 };
 
+let AutoTrim = (str) => {
+  return str.trim().replace("*", "");
+};
+
 let ParseTune = (filepath) => {
   return new Promise(function(resolve, reject) {
     fs.readFile(filepath, (err, data) => {
@@ -33,9 +37,9 @@ let ParseTune = (filepath) => {
 
       //parse out tune details
       resolve({
-        title: GetABCParam(abc, "T", "Sample Tune"),
-        type: GetABCParam(abc, "R", "Jig"),
-        author: GetABCParam(abc, "C", "Anon."),
+        title: AutoTrim(GetABCParam(abc, "T", "Sample Tune")),
+        type: AutoTrim(GetABCParam(abc, "R", "Jig")),
+        author:  AutoTrim(GetABCParam(abc, "C", "Anon.")),
         filename: filepath
       });
     });

@@ -11,7 +11,7 @@ function OnTuneIndexLoaded()
   setlist.html("");
 
   var setTemplate = function(tune) {
-    return `<li class="list-group-item setlist-item" onmousedown="javascript:DragBegin($(this));"">
+    return `<li class="list-group-item setlist-item">
               <i class="fas fa-bars"></i>
               <span class="setlist-title">${tune.title}</span>
               <a class="setlist-remove" href="javascript:void(0);" onclick="RemoveFromSetClicked('${tune.filename}', $(this))"><i class="fas fa-trash-alt"></i></button>
@@ -26,8 +26,6 @@ function OnTuneIndexLoaded()
       event.stopPropagation();
     });
   });
-
-  document.addEventListener('mouseup', DragEnd);
 
   OnSetListChanged();
 }
@@ -99,23 +97,4 @@ function RemoveFromSetClicked(tune, element)
     OnSetListChanged();
   });
 
-}
-
-var currentlyDragged = undefined;
-
-function DragBegin(element)
-{
-  DragEnd()
-  currentlyDragged = element;
-
-  currentlyDragged.addClass("grabbed");
-}
-
-function DragEnd()
-{
-  if(currentlyDragged == undefined) return;
-
-  currentlyDragged.removeClass("grabbed");
-
-  currentlyDragged = undefined;
 }

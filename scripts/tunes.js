@@ -28,7 +28,7 @@ function OnTuneIndexLoaded()
   UpdateFilteredTunes();
 }
 
-function GetFilter() { return $("#keyword-search").val();}
+function GetFilter() { return $("#keyword-search").val().trim();}
 
 // returns true if the tune should be shown based on the search filter
 function PassesFilter(tune)
@@ -70,7 +70,7 @@ function OnSearchFilterChanged()
     pageIndex = 0;
     filterChangedTimeout = 0;
     UpdateFilteredTunes();
-  }, 500);
+  }, 100);
 }
 
 // update which tunes are shown based on the filter
@@ -153,7 +153,7 @@ function UpdateFilteredTunes()
     $(".no-tunes-found").hide();
 
     $(".tune-pagination").show();
-    $(".tune-pagination .page-count").html("Showing " + (skip + 1) + " - " + Math.min(skip+maxperpage, count) + " of " + count);
+    $(".page-count").html("" + (skip + 1) + " - " + Math.min(skip+maxperpage, count) + " of " + count + " tunes");
     var pages = $(".tune-pagination .pagination");
     if(count <= maxperpage)
     {
@@ -195,6 +195,38 @@ function UpdateFilteredTunes()
       }
     }
   }
+
+  if(history)
+  {
+    history.replaceState(null, null, GenerateHotlinkURL());
+  }
+}
+
+//determines the URL parameters for the current page state
+function GenerateHotlinkURL()
+{
+  let params = new Object();
+
+  let query = GetFilter();
+  if(query.length != 0)
+  {
+    params["q"] = query;
+  }
+
+  var composerFilter = $("#composer-select option:checked").val().trim();
+  if(composerFilter.length != 0)
+  {
+    params["c"] = composerFilter;
+  }
+
+  let url = "tunes.html";
+  let i = 0;
+  for(var paramName in params) {
+    url = url + (i == 0 ? "?" : "&") + paramName + "=" + encodeURIComponent(params[paramName].toString());
+    i++;
+  }
+
+  return url;
 }
 
 function UpdateComposerList()
@@ -224,7 +256,7 @@ function UpdateComposerList()
   });
 
   uniqueComposers.sort(function(a,b) {
-    return a[0] > b[0];
+    return a[0] > b[0] && a[0] != "Trad";
   });
 
   uniqueComposers.forEach(function(composer) {

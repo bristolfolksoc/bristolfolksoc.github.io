@@ -15,6 +15,8 @@ Source code for a potential website that allows viewing and sharing of folk tune
 * Configuring the MIDI player to use a different voice and have options to vary playback speed
 * Transcribing tunes to other commonly played keys
 * Generate a printable PDF tunebook from a set of tunes
+* Use the HTML5 history API so you can 'hotlink' to a tune, extend so that you can do this for sets too
+* Optimise the searching algorithm (try to get better performance on mobile)
 
 ## I want to add a tune to the website
 
