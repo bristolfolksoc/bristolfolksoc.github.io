@@ -1,16 +1,39 @@
 ---
 layout: default
 ---
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalLabel">Share Set</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				Share this link so that others can view and print this set of tunes: <br/>
+        <input type="text" class="form-control" id="shareLinkText"></input>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <h1>My Set</h1>
 <div id="set-cotnainer">
-  <p>Click and drag on a tune to change it's order the set</p>
+  <p id="msg-parameterset" style="display:none;">You are viewing a shared set, to view your own set reload the page</p>
+  <a href="javascript:void(0);" onclick="GetSharableLink();"><button type="button" class="btn btn-outline-dark"><i class="fas fa-share-alt"></i> Share</button></a>
+  <a href="javascript:void(0);" onclick="CreateSetPDF();"><button type="button" class="btn btn-outline-dark"><i class="fas fa-file-pdf"></i> Create Printout</button></a>
+
+  <p>Click the arrow buttons on a tune to change it's order the set</p>
   <ul class="list-group" id="setlist">
     <li class="list-group-item"><i class="fas fa-spinner fa-2x fa-spin"></i></li>
   </ul>
 </div>
 <div class="no-tunes-found">
   <h2>No tunes found</h2>
-  <p>Search the tunebook to find things to add to your set</p>
+  <p>Search the <a href="tunes.html">tunebook</a> to find things to add to your set</p>
 </div>
 <div id="setlist-music-container"></div>
 

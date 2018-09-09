@@ -6,6 +6,7 @@
 .container
 {
   padding-top: 80px;
+  padding-bottom: 40px;
 }
 
 .outer-container
@@ -300,4 +301,24 @@ input:checked + .slider:before {
 .abcjs-inline-midi
 {
   display: none;
+}
+
+.badge-primary
+{
+  background-color: #ae31ad;
+}
+
+.setlist-item a button
+{
+  margin-right: 5px;
+}
+
+.setlist-item:first-child .moveupbtn
+{
+  visibility: hidden;
+}
+
+.setlist-item:last-child .movedownbtn
+{
+  visibility: hidden;
 }

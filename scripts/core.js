@@ -285,14 +285,20 @@ function OnPDFSettingChanged()
   // reset from previous version
   $('#btn-view-pdf button').html("<i class=\"fas fa-spinner fa-spin\"></i>");
   $('#btn-view-pdf').attr("href", "javascript:void(0);");
+  $('#a-view-pdf').hide();
 
   PDFReOrder = $("#pdf-best-fit").is(":checked");
   PDFIncludePageNumbers = $("#pdf-include-pnumbers").is(":checked");
 
-  CreatePDF(PDFTunes, function(url) {
-    $('#btn-view-pdf button').html("View PDF File");
-    $('#btn-view-pdf').attr("href", url);
-  });
+  setTimeout(function() {
+    CreatePDF(PDFTunes, function(url) {
+      $('#btn-view-pdf button').html("View PDF File");
+      $('#btn-view-pdf').attr("href", url);
+      $('#a-view-pdf a').attr("href", url);
+      $('#a-view-pdf a').html(url);
+      $('#a-view-pdf').show();
+    });
+  }, 500);
 }
 
 function CreatePDF(tunes, callback)
@@ -355,6 +361,12 @@ function CreatePDFFromTuneData(tuneData, callback)
 
   let yOffset = PDFTopMargin;
   tuneData.forEach(function(data) {
+    if(yOffset + (data.svg.clientHeight * PDFNoteSize) >= 750)
+    {
+      doc.addPage();
+      yOffset = PDFTopMargin;
+    }
+
     AddSVGToPDFDocument(doc, data.svg.children[0], yOffset);
     yOffset += (data.svg.clientHeight * PDFNoteSize);
   });
@@ -468,6 +480,10 @@ function AddSVGPathToPDFDocument(doc, path, yOffset)
   doc.restore();
 }
 
+function dateToString(d) {
+  return d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+}
+
 // w3 schools functions
 function SetCookie(cname, cvalue, exdays)
 {
@@ -498,6 +514,22 @@ function GetCookie(cname)
         }
     }
     return "";
+}
+
+// returns the value of a parameter or the default value if it was not specified
+function getHTMLParam(paramkey, defaultval = false)
+{
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+
+  for (var i=0;i<vars.length;i++)
+  {
+    var pair = vars[i].split("=");
+    if(pair[0] == paramkey)
+      return pair[1];
+  }
+
+  return defaultval;
 }
 
 function HighlightText(inText, filter)

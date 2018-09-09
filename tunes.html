@@ -19,18 +19,17 @@ layout: default
      Show only favorited
   </p>
   <select class="custom-select" id="composer-select">
-    <option selected>Filter by composer...</option>
-    <option value="Any">Any</option>
+    <option selected value="">Filter by composer...</option>
   </select>
 </div>
 
 <hr/>
 
 
-<span class="discrete" id="searchDesc">Searching "stars", favorited, composed by James Hill</span>
+<span id="searchDesc"></span>
 <nav class="tune-pagination">
 	<span class="discrete page-count">Showing ? - ? of ?</span>
-	<span class="discrete" id="updateTime" style="text-align:right;flex-grow:5;"></span>
+	<span class="discrete d-none d-sm-block" id="updateTime" style="text-align:right;flex-grow:5;"></span>
 </nav>
 
 

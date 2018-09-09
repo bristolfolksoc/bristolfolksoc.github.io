@@ -22,19 +22,57 @@ function OnTuneIndexLoaded()
   $("#lbl-num-in-set").show();
 
   var d = new Date(TuneIndex.genTime);
-  $("#updateTime").html("Last updated " + d.toString());
+  $("#updateTime").html("Last updated " + dateToString(d));
 
   UpdateComposerList();
+
+  $("#keyword-search").val(decodeURIComponent(getHTMLParam("q", "")));
+  $("#composer-select").val(decodeURIComponent(getHTMLParam("c", "")));
+
+  if(getHTMLParam("fav", "0") == "1")
+  {
+    $("#fav-filter").prop('checked', true);
+  }
+  else
+  {
+    $("#fav-filter").prop('checked', false);
+  }
+
+  let pageParam = getHTMLParam("p", "0");
+  if(!isNaN(pageParam))
+  {
+    pageIndex = parseInt(pageParam)-1;
+    if(pageIndex < 0) pageIndex = 0;
+  }
+
   UpdateFilteredTunes();
 }
 
 function GetFilter() { return $("#keyword-search").val().trim();}
 
+function clearSearch(param)
+{
+  if(param == 0)
+  {
+    $("#keyword-search").val("");
+  }
+  else if(param == 1)
+  {
+    $("#fav-filter").prop('checked', false);
+  }
+  else if(param == 2)
+  {
+    $("#composer-select").val("").change();
+  }
+
+  UpdateFilteredTunes();
+}
+
 // returns true if the tune should be shown based on the search filter
 function PassesFilter(tune)
 {
   var filterFav = $("#fav-filter").is(":checked");
-  var composerFilter = $("#composer-select option:checked").val();
+  var composerFilter = $("#composer-select option:selected").val();
 
   return MatchesFilter(tune.title, GetFilter()) &&
     (!filterFav || IsFavorite(tune.filename)) &&
@@ -166,34 +204,74 @@ function UpdateFilteredTunes()
 
       if(skip != 0)
       {
-        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:PrevPage();">Previous</a></li>`);
+        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:PrevPage();"><i class="fas fa-chevron-left"></i><span class="d-none d-md-inline-block">  Previous</span></a></li>`);
       }
       else
       {
-        pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>`);
+        pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i><span class="d-none d-md-inline-block">  Previous</span></a></li>`);
       }
 
-      for(var i = 0; i < Math.ceil(count / maxperpage); i = i + 1)
+      let totalPages = Math.ceil(count / maxperpage);
+      let maxDisplayedPages = 7;
+      var i = 0;
+      for(; i < pageIndex; i++)
       {
-        if(i == pageIndex)
+        if((pageIndex-i) > maxDisplayedPages-5 && i > 1)
         {
-          pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">${i+1}</a></li>`);
+          pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">...</a></li>`);
+          i = pageIndex - 2;
+          continue;
         }
-        else
+
+        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:SetPageIndex(${i});">${i+1}</a></li>`);
+      }
+
+      pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">${i+1}</a></li>`);
+      i++;
+
+      for(; i < totalPages; i++)
+      {
+        if((totalPages-i) > maxDisplayedPages-5 && i > pageIndex + 1)
         {
-          pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:SetPageIndex(${i});">${i+1}</a></li>`);
+          pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">...</a></li>`);
+          i = totalPages - 3;
+          continue;
         }
+
+        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:SetPageIndex(${i});">${i+1}</a></li>`);
       }
 
       if(skip + maxperpage < count)
       {
-        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:NextPage();">Next</a></li>`);
+        pages.append(`<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="javascript:NextPage();"><span class="d-none d-md-inline-block">Next  </span><i class="fas fa-chevron-right"></i></a></li>`);
       }
       else
       {
-        pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>`);
+        pages.append(`<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"><span class="d-none d-md-inline-block">Next  </span><i class="fas fa-chevron-right"></i></a></li>`);
       }
     }
+  }
+
+  let badgeMarkup = (text, param) => { return `<a href="javascript:void(0);" onclick="clearSearch(${param})" class="badge badge-primary" style="margin-right:3px;">${text} <i class="fas fa-times-circle"></i></a>` };
+  let badgeContainer = $("#searchDesc");
+
+  badgeContainer.html("");
+
+  if(GetFilter() != "")
+  {
+    badgeContainer.append(badgeMarkup("\"" + GetFilter() + "\"", 0));
+  }
+
+  let cFilter = $("#composer-select option:selected").val();
+  if(cFilter != "")
+  {
+    badgeContainer.append(badgeMarkup(cFilter, 2));
+  }
+
+  var filterFav = $("#fav-filter").is(":checked");
+  if(filterFav != "")
+  {
+    badgeContainer.append(badgeMarkup("Favorited", 1));
   }
 
   if(history)
@@ -213,10 +291,21 @@ function GenerateHotlinkURL()
     params["q"] = query;
   }
 
-  var composerFilter = $("#composer-select option:checked").val().trim();
+  var composerFilter = $("#composer-select option:selected").val().trim();
   if(composerFilter.length != 0)
   {
     params["c"] = composerFilter;
+  }
+
+  var filterFav = $("#fav-filter").is(":checked");
+  if(filterFav)
+  {
+    params["fav"] = 1;
+  }
+
+  if(pageIndex != 0)
+  {
+    params["p"] = pageIndex + 1;
   }
 
   let url = "tunes.html";
