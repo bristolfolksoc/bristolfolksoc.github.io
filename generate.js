@@ -11,7 +11,10 @@ let GetABCParam = (abc, paramname, defaultValue = "") => {
   {
     if(lines[i].startsWith(paramname))
     {
-      value = lines[i].slice(paramname.length + 1).trim();
+      let idx = lines[i].indexOf(":");
+      if(idx == -1) value = lines[i].slice(paramname.length + 1).trim();
+      else value = lines[i].slice(idx + 1).trim();
+
       break;
     }
   }
@@ -38,8 +41,9 @@ let ParseTune = (filepath) => {
       //parse out tune details
       resolve({
         title: AutoTrim(GetABCParam(abc, "T", "Sample Tune")),
-        type: AutoTrim(GetABCParam(abc, "R", "Jig")),
+        type: AutoTrim(GetABCParam(abc, "R", "Miscellaneous")),
         author:  AutoTrim(GetABCParam(abc, "C", "Anon.")),
+        bars:  AutoTrim(GetABCParam(abc, "r", "0")),
         filename: filepath
       });
     });

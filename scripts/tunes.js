@@ -12,6 +12,14 @@ window.addEventListener('load', function() {
   $("#composer-select").on('change', function(e) {
     OnSearchFilterChanged();
   });
+
+  $("#type-select").on('change', function(e) {
+    OnSearchFilterChanged();
+  });
+
+  $("#bars-select").on('change', function(e) {
+    OnSearchFilterChanged();
+  });
 });
 
 function OnTuneIndexLoaded()
@@ -25,9 +33,13 @@ function OnTuneIndexLoaded()
   $("#updateTime").html("Last updated " + dateToString(d));
 
   UpdateComposerList();
+  UpdateTypesList();
+  UpdateBarsList();
 
   $("#keyword-search").val(decodeURIComponent(getHTMLParam("q", "")));
   $("#composer-select").val(decodeURIComponent(getHTMLParam("c", "")));
+  $("#type-select").val(decodeURIComponent(getHTMLParam("t", "")));
+  $("#bars-select").val(decodeURIComponent(getHTMLParam("b", "")));
 
   if(getHTMLParam("fav", "0") == "1")
   {
@@ -64,6 +76,14 @@ function clearSearch(param)
   {
     $("#composer-select").val("").change();
   }
+  else if(param == 3)
+  {
+    $("#type-select").val("").change();
+  }
+  else if(param == 4)
+  {
+    $("#bars-select").val("").change();
+  }
 
   UpdateFilteredTunes();
 }
@@ -73,10 +93,14 @@ function PassesFilter(tune)
 {
   var filterFav = $("#fav-filter").is(":checked");
   var composerFilter = $("#composer-select option:selected").val();
+  var barFilter = $("#bars-select option:selected").val();
+  var typeFilter = $("#type-select option:selected").val();
 
   return MatchesFilter(tune.title, GetFilter()) &&
     (!filterFav || IsFavorite(tune.filename)) &&
-    (composerFilter == "" || tune.author == composerFilter);
+    (composerFilter == "" || tune.author == composerFilter) &&
+    (barFilter == "" || tune.bars == barFilter) &&
+    (typeFilter == "" || tune.type == typeFilter);
 }
 
 var pageIndex = 0;
@@ -274,6 +298,18 @@ function UpdateFilteredTunes()
     badgeContainer.append(badgeMarkup("Favorited", 1));
   }
 
+  var filterType = $("#type-select option:selected").val();
+  if(filterType != "")
+  {
+    badgeContainer.append(badgeMarkup(filterType, 3));
+  }
+
+  var filterBar = $("#bars-select option:selected").val();
+  if(filterBar != "")
+  {
+    badgeContainer.append(badgeMarkup(filterBar + " Bar", 4));
+  }
+
   if(history)
   {
     history.replaceState(null, null, GenerateHotlinkURL());
@@ -301,6 +337,18 @@ function GenerateHotlinkURL()
   if(filterFav)
   {
     params["fav"] = 1;
+  }
+
+  var filterType = $("#type-select option:selected").val();
+  if(filterType != "")
+  {
+    params["t"] = filterType;
+  }
+
+  var filterBar = $("#bars-select option:selected").val();
+  if(filterBar != "")
+  {
+    params["b"] = filterBar;
   }
 
   if(pageIndex != 0)
@@ -350,6 +398,76 @@ function UpdateComposerList()
 
   uniqueComposers.forEach(function(composer) {
     $("#composer-select").append(composerLITemplate(composer[0], composer[1]));
+  });
+}
+
+function UpdateTypesList()
+{
+  $("#type-select").empty();
+  $("#type-select").append("<option value=\"\" selected>Filter by tune type...</option>");
+
+  var typeLITemplate = function(name, count) {
+    return `<option value="${name}">${name} (${count})</option>`;
+  }
+
+  var uniqueTypes = [];
+
+  TuneIndex.tunes.forEach(function(tune)
+  {
+    let idx = uniqueTypes.findIndex(function(type) {
+      return type[0].trim() == tune.type.trim();
+    });
+
+    if(idx != -1)
+    {
+      uniqueTypes[idx][1] += 1;
+      return;
+    }
+
+    uniqueTypes.push([tune.type, 1]);
+  });
+
+  uniqueTypes.sort(function(a,b) {
+    return a[0] > b[0];
+  });
+
+  uniqueTypes.forEach(function(type) {
+    $("#type-select").append(typeLITemplate(type[0], type[1]));
+  });
+}
+
+function UpdateBarsList()
+{
+  $("#bars-select").empty();
+  $("#bars-select").append("<option value=\"\" selected>Filter by number of bars...</option>");
+
+  var barsLITemplate = function(name, count) {
+    return `<option value="${name}">${name} bar (${count})</option>`;
+  }
+
+  var uniqueBars = [];
+
+  TuneIndex.tunes.forEach(function(tune)
+  {
+    let idx = uniqueBars.findIndex(function(bar) {
+      return bar[0].trim() == tune.bars.trim();
+    });
+
+    if(idx != -1)
+    {
+      uniqueBars[idx][1] += 1;
+      return;
+    }
+
+    uniqueBars.push([tune.bars, 1]);
+  });
+
+  uniqueBars.sort(function(a,b) {
+    return a[0] > b[0];
+  });
+
+  uniqueBars.forEach(function(bars) {
+    $("#bars-select").append(barsLITemplate(bars[0], bars[1]));
   });
 }
 

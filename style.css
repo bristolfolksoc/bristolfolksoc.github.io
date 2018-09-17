@@ -322,3 +322,9 @@ input:checked + .slider:before {
 {
   visibility: hidden;
 }
+
+select
+{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
