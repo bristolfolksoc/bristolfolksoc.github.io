@@ -1,0 +1,14 @@
+X: 1
+T: Frank's
+C: John McCusker
+M: 4/4
+L: 1/8
+R: Reel
+K: A
+"A" AcBA F2 AF | EFAB cABc | "D" d3 f "A/C#" ecAe | "Bm/D" faec BdcB |
+"A" AcBA F2 AF | EFAB cABc | "D" d3 f "Bm" ecAe |[1 "E7" BAGB "A" A2 (3EFG :|[2 "E7" BAGB "A" Aefg ||
+"A" aAA gAA "D" fA | "E" effe "A" cABc | "D" d3f ecAc | "E" Bcde fefg |
+"A" aAA gAA "D" fA | "E" effe "A/C#" cABc | "Bm" d3f ecAc | "E" BAGB "A" Aefg |
+"A" aAA gAA "D" fA | "E" effe "A" cABc | "D" d3f eAce | "F#m" faec "E7/G#" BdcB |
+"A" AcBA F2 AF | EFAB cABc | "D" d3 f ecAc | "E7" BAGB "A" A4 ||
+r: 32
