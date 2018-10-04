@@ -1,1 +1,1 @@
-exclude: ["README.md", "package.json", "generate.js", ".travis.yml", ".gitignore"]
+exclude: ["README.md", "package.json", "generate.js", ".travis.yml", ".gitignore", "njekyll"]

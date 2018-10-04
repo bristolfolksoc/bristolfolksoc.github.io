@@ -328,3 +328,8 @@ select
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.centered
+{
+  text-align: center;
+}
