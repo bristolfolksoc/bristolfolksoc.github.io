@@ -12,7 +12,9 @@ var CurSet = [];
 function DefaultSettings()
 {
   return {
-    cookiesEnabled: false
+    cookiesEnabled: false,
+    cleff: "treble",
+    transposition: 0
   };
 }
 
@@ -91,9 +93,25 @@ function LoadSettings()
 
   LoadedSettings = JSON.parse(JSONString);
 
-  // if there is a JSON error reset the favorites
+  /*
+   * The user may have some settings missing:
+   * In this case we want to copy the default values for their missing settings
+   * and resave their cookie so it is up to date
+   */
   if(LoadedSettings != null)
-    Settings = LoadedSettings;
+  {
+    Object.keys(LoadedSettings).forEach(function(key, index) {
+      if(Settings.hasOwnProperty(key))
+      {
+        Settings[key] = LoadedSettings[key];
+      }
+    });
+
+    SetCookie(Settings_CNAME, JSON.stringify(Settings), CDUR);
+
+    $("#cleffSelect").val(Settings.cleff);
+    $("#transpositionSelect").val(Math.floor(Settings.transposition / 12));
+  }
 }
 
 function SetupModals()
@@ -103,6 +121,18 @@ function SetupModals()
 
     SetCookie(Settings_CNAME, JSON.stringify(Settings), CDUR);
   });
+
+  $("#transpositionSelect").on('change', function(event) {
+    Settings.transposition = parseInt($("#transpositionSelect").val()) * 12;
+    if(!Settings.cookiesEnabled) $('#settingsModal').modal('hide');
+    SetCookie(Settings_CNAME, JSON.stringify(Settings), CDUR);
+  });
+
+  $("#cleffSelect").on('change', function(event) {
+    Settings.cleff = $("#cleffSelect").val();
+    if(!Settings.cookiesEnabled) $('#settingsModal').modal('hide');
+    SetCookie(Settings_CNAME, JSON.stringify(Settings), CDUR);
+  });
 }
 
 function LoadAndRenderTune(filepath, div)
@@ -110,12 +140,12 @@ function LoadAndRenderTune(filepath, div)
   let xhr = new XMLHttpRequest();
   xhr.open("GET", filepath);
   xhr.onload = function() {
-    ABCJS.renderAbc(div[0], xhr.responseText,
-      { },
+    let processedABC = preProcessABC(xhr.responseText);
+    ABCJS.renderAbc(div[0], processedABC,
       {
-          staffwidth: div.width() - 30,
-      },
-      { });
+        visualTranspose: Settings.transposition,
+        staffwidth: div.width() - 30,
+      });
   };
 
   xhr.send();
@@ -135,6 +165,18 @@ function LoadMidiForTune(filepath, div, callback)
   };
 
   xhr.send();
+}
+
+function preProcessABC(inABC)
+{
+  // include the users selected cleff
+  let keyText = GetABCHeader(inABC, 'K');
+
+  console.log(keyText);
+
+  let modifiedABC = SetABCHeader(inABC, 'K', keyText + " " + Settings.cleff);
+
+  return modifiedABC;
 }
 
 function LoadRawABC(filepath, callback)
@@ -187,6 +229,22 @@ function MatchesFilter(inText, filter)
   });
 
   return result;
+}
+
+function GetABCHeader(abc, header)
+{
+  let lines = abc.split('\n');
+
+  for(let i = 0; i < lines.length; i++)
+  {
+    let line = lines[i];
+    if(line.startsWith(header))
+    {
+      return line.substr(line.indexOf(':')+1).trim();
+    }
+  }
+
+  return undefined;
 }
 
 function SetABCHeader(abc, header, value)
@@ -319,12 +377,12 @@ function CreatePDF(tunes, callback)
       //create a fake element and create the SVG inside of it
       tuneData[index].svg = document.createElement("div");
       document.body.appendChild(tuneData[index].svg);
-      ABCJS.renderAbc(tuneData[index].svg, abc,
-        { },
+      let processedABC = preProcessABC(abc);
+      ABCJS.renderAbc(tuneData[index].svg, processedABC,
         {
-            staffwidth: 500 / PDFNoteSize,
-        },
-        { });
+          visualTranspose: Settings.transposition,
+          staffwidth: 500 / PDFNoteSize
+        });
 
       remainingTunes--;
 
@@ -569,4 +627,9 @@ function HighlightText_recursive(inText, filters)
 function GetTuneData(filename)
 {
   return TuneIndex.tunes.find(function(tune) { return tune.filename == filename; })
+}
+
+function showSettingsModal()
+{
+  $("#settingsModal").modal();
 }
