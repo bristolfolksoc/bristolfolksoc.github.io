@@ -172,8 +172,6 @@ function preProcessABC(inABC)
   // include the users selected cleff
   let keyText = GetABCHeader(inABC, 'K');
 
-  console.log(keyText);
-
   let modifiedABC = SetABCHeader(inABC, 'K', keyText + " " + Settings.cleff);
 
   return modifiedABC;
@@ -361,8 +359,7 @@ function OnPDFSettingChanged()
 
 function CreatePDF(tunes, callback)
 {
-  var remainingTunes = tunes.length;
-
+  var remainingTunes = 1;
   var tuneData = [];
 
   tunes.forEach(function(tune, index) {
@@ -370,6 +367,13 @@ function CreatePDF(tunes, callback)
       path: tune,
       abc: ''
     });
+
+    if(tune.startsWith("pagebreak"))
+    {
+      return;
+    }
+
+    remainingTunes++;
 
     LoadRawABC(tune, function(abc) {
       tuneData[index].abc = abc;
@@ -385,18 +389,22 @@ function CreatePDF(tunes, callback)
         });
 
       remainingTunes--;
-
       if(remainingTunes == 0)
       {
         CreatePDFFromTuneData(tuneData, callback);
 
         //clean up the created elements
         tuneData.forEach(function(data) {
-          document.body.removeChild(data.svg);
+          if(data.svg != undefined)
+          {
+            document.body.removeChild(data.svg);
+          }
         });
       }
     });
   });
+
+  remainingTunes--;
 }
 
 function CreatePDFFromTuneData(tuneData, callback)
@@ -418,7 +426,18 @@ function CreatePDFFromTuneData(tuneData, callback)
   doc.addPage();
 
   let yOffset = PDFTopMargin;
-  tuneData.forEach(function(data) {
+  tuneData.forEach(function(data, idx) {
+    if(data.path.startsWith("pagebreak"))
+    {
+      if(yOffset != PDFTopMargin)
+      {
+          doc.addPage();
+          yOffset = PDFTopMargin;
+      }
+
+      return;
+    }
+  
     if(yOffset + (data.svg.clientHeight * PDFNoteSize) >= 750)
     {
       doc.addPage();

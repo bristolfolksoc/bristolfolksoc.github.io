@@ -10,18 +10,6 @@ function OnTuneIndexLoaded()
   $("#lbl-num-in-set").html(CurSet.length);
   $("#lbl-num-in-set").show();
 
-  var setlist = $("#setlist");
-  setlist.html("");
-
-  var setTemplate = function(tune) {
-    return `<li class="list-group-item setlist-item">
-              <a href="javascript:void(0);" onclick="MoveTuneUp('${tune.filename}', $(this));" class="moveupbtn"><button type="button" class="btn btn-outline-dark" style="padding-bottom:1px;"><i class="fas fa-sort-up"></i></button></a>
-              <a href="javascript:void(0);" onclick="MoveTuneDown('${tune.filename}', $(this));" class="movedownbtn"><button type="button" class="btn btn-outline-dark" style="padding-top:1px;"><i class="fas fa-sort-down"></i></button></a>
-              <span class="setlist-title">${tune.title}</span>
-              <a class="setlist-remove" href="javascript:void(0);" onclick="RemoveFromSetClicked('${tune.filename}', $(this))"><i class="fas fa-trash-alt"></i></button>
-            </li>`;
-  };
-
   try
   {
     LocalSet = JSON.parse(decodeURIComponent(getHTMLParam("set", "")));
@@ -36,77 +24,52 @@ function OnTuneIndexLoaded()
     history.replaceState(null, null, "set.html");
   }
 
-  LocalSet.forEach(function(tunefilename) {
-    let tuneData = GetTuneData(tunefilename);
-
-    let removeBtn = setlist.append(setTemplate(tuneData)).find(".setlist-remove");
-    removeBtn[0].addEventListener('mousedown', function(event) {
-      event.stopPropagation();
-    });
-  });
-
-  if(LocalSet.length == 0)
-  {
-    $("#set-cotnainer").hide();
-    $(".no-tunes-found").show();
-  }
-
   OnSetListChanged();
 }
 
 function OnSetListChanged()
 {
-  return;
-  let container = $("#setlist-music-container");
+  var setlist = $("#setlist");
+  setlist.html("");
+
+  var setTemplate = function(filename, title) {
+    return `<li class="list-group-item setlist-item">
+              <a href="javascript:void(0);" onclick="MoveTuneUp('${filename}', $(this));" class="moveupbtn"><button type="button" class="btn btn-outline-dark" style="padding-bottom:1px;"><i class="fas fa-sort-up"></i></button></a>
+              <a href="javascript:void(0);" onclick="MoveTuneDown('${filename}', $(this));" class="movedownbtn"><button type="button" class="btn btn-outline-dark" style="padding-top:1px;"><i class="fas fa-sort-down"></i></button></a>
+              <span class="setlist-title">${title}</span>
+              <a class="setlist-remove" href="javascript:void(0);" onclick="RemoveFromSetClicked('${filename}', $(this))"><i class="fas fa-trash-alt"></i></button>
+            </li>`;
+  };
 
   if(LocalSet.length == 0)
   {
-    conainer.html("");
-    container.hide();
+    setlist.hide();
     $(".no-tunes-found").show();
     return;
   }
   else
   {
-    container.show();
+    setlist.show();
     $(".no-tunes-found").hide();
   }
 
-  container.html("<i class=\"fas fa-spinner fa-2x fa-spin\"></i>");
+  LocalSet.forEach(function(tunefilename, idx) {
+    if(tunefilename.startsWith("pagebreak"))
+    {
+      LocalSet[idx] = "pagebreak" + idx;
+      let removeBtn = setlist.append(setTemplate("pagebreak" + idx, "New Page")).find(".setlist-remove");
 
-  let numTunes = LocalSet.length;
-  let abcs = [];
+      removeBtn[0].addEventListener('mousedown', function(event) {
+        event.stopPropagation();
+      });
+      return;
+    }
 
-  LocalSet.forEach(function(tune, index) {
-    LoadRawABC(tune, function(abc) {
-      abcs.splice(index, 0, abc);
-      numTunes--;
+    let tuneData = GetTuneData(tunefilename);
 
-      // check if all requests have returned
-      if(numTunes == 0)
-      {
-        let superABC = "";
-        let containers = [];
-
-        container.html("");
-
-        abcs.forEach(function(tuneABC, index) {
-          tuneABC = SetABCHeader(tuneABC, "X", index+1);
-          superABC = superABC + "\n" + tuneABC;
-
-          container.append("<div></div>");
-          containers.push(container[0].children[index]);
-        });
-
-        console.log(superABC);
-
-        ABCJS.renderAbc(containers, superABC,
-          { },
-          {
-              staffwidth: container.width() - 30,
-          },
-          { });
-      }
+    let removeBtn = setlist.append(setTemplate(tuneData.filename, tuneData.title)).find(".setlist-remove");
+    removeBtn[0].addEventListener('mousedown', function(event) {
+      event.stopPropagation();
     });
   });
 }
@@ -176,4 +139,17 @@ function MoveTuneUp(tune, element)
       CurSet = LocalSet;
       SetCookie(CurSet_CNAME, JSON.stringify(CurSet), CDUR);
     }
+}
+
+function AddPageBreak()
+{
+  LocalSet.push("pagebreak");
+
+  if(!usingParameterSet)
+  {
+    CurSet = LocalSet;
+    SetCookie(CurSet_CNAME, JSON.stringify(CurSet), CDUR);
+  }
+
+  OnSetListChanged();
 }
