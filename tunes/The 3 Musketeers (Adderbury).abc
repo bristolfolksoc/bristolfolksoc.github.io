@@ -7,8 +7,17 @@ C:Trad
 K: G
 Z: ABC by Mackin
 r: 32
-W: Music formula for morris dance: (1/2)A.(AB)3A
+W: Music formula for morris dance: A.(AB)3.(CD)2.AB
+W: Warning, it starts with a song. 
 P:A
-D2 | "G" G2 D2 "(C)" G2 "(D)" A2 | "G" B2 AG "D" A2 Bc| "G" d2 G2 G2 B2 | "C" AGFE "D" D2 D2 | "G" G2 D2 "(C)" G2 "(D)" A2 | "G" B2 cB "D" A2 Bc| d2 G2 "D" BAGF |"G" G4 G2 |
+D2 | "G" G2 D2 "(C)" G2 "(D)" A2 | "G" B2 AG "D" A2 Bc| "G" d2 G2 G2 B2 | "C" AGFE "D" D2 D2 | 
+"G" G2 D2 "(C)" G2 "(D)" A2 | "G" B2 cB "D" A2 Bc| d2 G2 "D" BAGF |"G" G4 G2 |
 P:B 
-Bc | "G" d2> e2 "D" d2 c2| "G" B2 c2 d4 | "C" e2 e2 dcBA | "G" G4 "D" F2  D2 | "G" G2 D2 "(C)" G2 "(D)" A2 | "G" B2 cB "D" A2 Bc | "G" d2 G2 "D" BAGF| "G" G4 G2 ||
+Bc | "G" d2> e2 "D" d2 c2| "G" B2 c2 d4 | "C" e2 e2 dcBA | "G" G4 "D" F2  D2 |
+"G" G2 D2 "(C)" G2 "(D)" A2 | "G" B2 cB "D" A2 Bc | "G" d2 G2 "D" BAGF| "G" G4 G2 |
+P:C
+|"G" B2 B2 "C" c2 d2 | "G" d2 c2 "D" B2 A2 | "G" G2 G2 "C (Am)" A2 B2 | "D" B2 A2 A4 |
+|"G" B2 B2 "C" c2 d2 | "G" d2 c2 "D" B2 A2 | "G" G2 G2 "C (Am)" A2 B2 | "D" A2 G2 "G" G4 | 
+P:D  
+|"D" A4 "G" B2 G2 | "D" A2 Bc "G" B2 G2 | "D" A2 Bc "(EM)" B2 A2 | "A" G2 A2 "D" D4 |
+| "G" B2 B2 "C" c2 d2 | "G" d2 c2 "D" B2 A2 | "G" G2 G2 "C" A2 B2 | "D" A2 G2 "G" G4 |
