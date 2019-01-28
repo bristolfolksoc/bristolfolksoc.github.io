@@ -1,15 +1,17 @@
-X: 1
-T: Trees - Field town
-T: Shepherd's Hey 
-M: 2/2
+X:1
+T: Trees - Field Town
+T: Shepherds' Hey
+M: 6/8
 L: 1/8
-R: Morris
-C: Trad
+R: Rag Morris
+C:Trad
 K: G
+Z: ABC by Mackin & Rag (2009)
 r: 32
-Z: ABC by Mackin
-W: Music formula for morris dance: (1/2)A.(AB)3A
-P: A
-: B>c| d>cB>c d2 e>f| g>ag>f e2 B>c | d>cB>c d2 e>f| [M:3/2] g>ag>f e4 z:|
-P: B
-: d | [M:2/2] c2 c>c B>AG>B | d>c (3Bcd c>B (3ABc| B>A G2 A>Bc>d| [M:3/2] e>fg>f e4 z :|
+W: Music formula for morris dance: A.(AB)3A.
+[P:A]
+B2 c |: d2 c B2 c|d3 e2 f | g2 a g2 f | e3 B2 c | d2 c B2 c | 
+d3 e3 f | g2 a g2 f| [1357 He3 B2 c :|][246 He3 "To B" d3|][8He6|]
+P:B
+|: c3 c3 | B2 A G2 B| d2 c Bcd| c2 B ABc | 
+B2 A G3 | A2 B c2 d | e2 f g2 f |[1 He3 d3 :|][2 He3 B2 c|]
