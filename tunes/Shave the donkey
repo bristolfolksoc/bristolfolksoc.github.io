@@ -2,17 +2,15 @@ X:1
 T: Shave the Donkey - Bampton
 M:4/4
 L:1/8
-R:Morris
+R: Rag Morris
 C: Trad 
 K: G
-Z: ABC  by Mackin
+Z: ABC  by Mackin & Rag (2009)
 W: Music formula for morris dance: A.(ABC)4 
 r: 48
 P:A
-GA | "G" B2 B2 "D" cBcB | "G" G2 g2 "C" efge | "G" d2 Bd "D" cBcA | "G" G2 "(D)" B2 "G" G4 :|
+GA |: "G" g2 B2 "D" cBcB | "G" G2 g2 "C" efge | "G" d2 Bd "D" cBcA | "G" G2 B2 G4 :|
 P:B 
- "D" A3 c2 "G" B2 d2 | "D" A3 c2 "G" B2 d2 | "D" A3 c2 "G" B2 d2 | "D" dcBA "G" B2 G2 | 
-"D" A2 Ac "G" B2 d2 | "D" A2 Ac "G" B2 d2 |  "D" A2 Ac "G" B2 d2 | "D" dcBA "G" G3 ||
+ |: "D" A3 c "G" B2 d2 | "D" A3 c "G" B2 d2 | "D" A3 c "G" B2 d2 | [1 "D" dcBA "G" B2 G2 :|][2  "D" dcBA "G" G2 GA ||
 P:C 
-GA | "G" B2 Bc d2 cB | "D" A2 AB c2 A2 | "G" B2 Bc d2 g2 | "D" dcBA "G" G GA | 
-B2 Bc d2 cB| "D" A2 AB c2 A2 | "G" B2 Bc d2 g2 | "D" fdef "G" g4 ||
+|: "G" B2 Bc d2 cB | "D" A2 AB c2 A2 | "G" B2 Bc d2 g2 | [1 "D" dcBA "G" c2 G2 :|][2  "D" fdef "G" g4 ||

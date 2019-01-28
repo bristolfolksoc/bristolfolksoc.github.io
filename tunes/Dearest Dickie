@@ -1,20 +1,18 @@
 X:1
-T: Dearest Dickie - Field Town 
+T: Dearest Dickie 
 M: 6/8
 L: 1/8
-C: Trad 
-R: Morris
+C: Trad
+R: Rag Morris
 K: G
-Z: ABC  by Mackin
-W: Music formula for morris dance: A(AB3)2(AC3)2
-r: 56
-P: A
-D | "G" G2 G BAB |  "C" cBc "D" def | "G" gfg "C" edc | "G" BAG "D" FED | 
-"G" G2 G BAB | "C" cBc "D" def | "G" gfg "A" AB^c | "D" d3 d :| 
+r: 32
+Z: ABC  by Mackin & Rag (2009) 
+W: Music formula for morris dance: A(A2B3)2(A2SlowB3)2
+D [P: A]|: "G" G2 G BAB |  "C" cBc "D" def | "G" gfg "C" edc | "G" BAG "D" FED | 
+"G" G2 G BAB | "C" cBc "D" def | "G" gfg "A" AB^c | [1 "D" d3/e/d cBA :| ] [2 "D" d3-dBc] ||
 P: B 
-Bc | "G" dGB "C" cde | "D" cAB cBA | "G" dGB "C" cde | "D" cAB c2 d | 
-"C" e2 d "D" eaf | "G" g2 f/g/ "C" gfe | "G" dcB "D" AGF | "C" GAG "G" G2 ||
-P:C
-B/c/ | "G" dGB "C" cde | "D" cAB cBA | "G" dGB "C" cde | "D" cAB c2 d | 
-"C" (2e-d | "D" (2e-a f3 | "G" (2g-a g3 | "C" (2g-f e3 | 
-"G" (2f-c B3 |  "D" (2A-G F3 | "C" (2G-A G3 | "G" G3-G2 ||
+|: "G" d2 B "C" cde | "C/A" cAB cBA | "G" d2 B "C" cde | "D" cAB c2 d | 
+"C" e2 d "D" eaf | "G" g3/a/g  "C" gfe | "G" dcB "D" AGF | [12 "C" G3/A/G GB"D"c :|] [3 "C" G3/A/G "G" G2] ||
+P:SlowB
+|: "G" d2 B "C" cde | "C/A" cAB "D" cBA | "G" d2 B "C" cde | "C/A" cAB c2 d | "C" (2e-d e3|
+| "D" (2ea f3 | "G" (2ga g3 | "C" (2gf e3 | "G" (2d-c B3 |  "D" (2AG F3 | "C" (2GA G3 |[12 G3-GBc :|] [3 "G" G3-G2 ] ||
