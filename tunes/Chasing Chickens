@@ -2,15 +2,15 @@ X:1
 T:Chasing Chickens - Bampton
 M:4/4
 L:1/8
-R:Morris
-K:G
-Z: ABC  by Mackin
+R:Rag Morris
 C: Trad
-W: Music formula for morris dance: A.(AB)4 
+K:G
+Z: ABC  by Mackin & Rag (2009)
+W: Music formula for morris dance: A(AB)4 
 P:A
- D2 | "G" G2 AG "D" FE D2 | "G" G2 AB "C" c2 Bc | "G"d2 de "D" dcBA | "G" GABA "D" D2 EF| 
-|"G" G2 AG "D" FE D2 |"G" G2 AB "C" c2 Bc | "G" d2 de "D" dcBA | "G" G2 "(B)" D2 "G" G2 |
+ D2 | "G" G2 AG "D" FE D2 | "G" G2 AB "C" c2 Bc | "G"d2 de "D" dcBA | "G" GABA "D" D2 EF| "G" G2 AG "D" FE D2 |
+"G" G2 AB "C" c2 Bc | "G" d2 de "D" dcBA | "G" G2 "(B)" D2 "G" G2 :|
 P:B
- D2 |: "G" GABc d2 d2 | "C" e2 dB "D" c2 Bc | "G" d2 de "D" dcBA | "G" GABA "D" D2 EF |
-| "G" G2 AG "D" FE D2 | "G" G2 AB "C" c2 Bc | "G" d2 de "D" dcBA | "G" G2 "(D)" F2 "G" G2 :|
-r :24
+ D2 | "G" GABc d2 d2 | "C" e2 dB "D" c2 Bc | "G" d2 de "D" dcBA |
+"G" GABA "D" D2 EF | "G" G2 AG "D" FE D2 | "G" G2 AB "C" c2 Bc | "G" d2 de "D" dcBA | "G" G2 "(D)" F2 "G" G2 :|
+r :32
