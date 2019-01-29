@@ -8,12 +8,12 @@ K: G
 r: 32
 Z: ABC  by Mackin & Rag (2009) 
 W: Music formula for morris dance: A(A2B3)2(A2SlowB3)2
-Q: 1/8 = 80
+Q: 3/8 = 120
 D [P: A]|: "G" G2 G BAB |  "C" cBc "D" def | "G" gfg "C" edc | "G" BAG "D" FED | 
 "G" G2 G BAB | "C" cBc "D" def | "G" gfg "A" AB^c | [1 "D" d3/e/d cBA :| [2 "D" d3-dBc ||
 P: B 
 |: "G" d2 B "C" cde | "C/A" cAB cBA | "G" d2 B "C" cde | "D" cAB c2 d | 
 "C" e2 d "D" eaf | "G" g3/a/g  "C" gfe | "G" dcB "D" AGF | [1,2 "C" G3/A/G GB"D"c :| [3 "C" G3/A/G "G" G2 ||
 P:SlowB
-|: "G" d2 B "C" cde | "C/A" cAB "D" cBA | "G" d2 B "C" cde | "C/A" cAB c2 d | [Q: 1/8 = 50] 1/4"C" (2e-d e3|
-| "D" (2ea f3 | "G" (2ga g3 | "C" (2gf e3 | "G" (2d-c B3 |  "D" (2AG F3 | "C" (2GA G3 [Q: 1/4 = 80]|[12 G3-GBc :|[3 "G" G3-G2 ||
+|: "G" d2 B "C" cde | "C/A" cAB "D" cBA | "G" d2 B "C" cde | "C/A" cAB c2 d | [Q: 3/8 = 50] 1/4"C" (2e-d e3|
+| "D" (2ea f3 | "G" (2ga g3 | "C" (2gf e3 | "G" (2d-c B3 |  "D" (2AG F3 | "C" (2GA G3 [Q: 3/8 = 120]|[12 G3-GBc :|[3 "G" G3-G2 ||
