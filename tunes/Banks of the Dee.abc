@@ -7,12 +7,14 @@ M: 6/8
 Z: Mackin 
 C: Trad
 r: 20
+W: Morris Formula: A(with song, no chords).(AB)2(A Slow B)2 
+Q: 3/8 = 120]
 P:A
 |: DEF GAB  | ced cBA | BGE Ddc | BcA G3  :|
 P:B
 |: Bcd c2 g | ede dBG | Bcd efg | GAG FED |
 cec BdB  | GFG AFD | GFE Ddc | BcA G2  :|
 P: Slow B
-|:(2Bc d3 | d3 g3 | (2ed e3 | (2dB G3 |
-(2Bc d3 | (2ef g3 | (2GA G3 | (2FE D3 |
+|:[Q: 3/8 = 80](2Bc d3 | d3 g3 | (2ed e3 | (2dB G3 |
+(2Bc d3 | (2ef g3 | (2GA G3 | (2FE D3 | [Q: 3/8 = 120]
 cec BdB  | GFG AFD | GFE Ddc | BcA G2  :|
