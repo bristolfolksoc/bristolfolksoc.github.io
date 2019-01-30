@@ -6,12 +6,12 @@ C: ????
 R: Rag Morris
 K: G
 Z: ABC  by Mackin
-W: Music formula for morris dance: (AB)4 
-W: Jess has discovered version bars since transcribing this and will fix it at some point. 
+W: Music formula for morris dance: A.(AB)4 
 r: 32
 P:A
 D | "G" G2 G G2 A | BGe d2 B | "G" GAB "D" A2 A | "G" G3-G2 D |
 "G" G2 G G2 A | BGe d2 B | "G" GAB "D" A2 A | "G" G3-G2 A ||
 P:B 
 "D" B2 A B2 A | B2 A "G" G3 | B2 A B2 A | B2 e "D" d2 B | 
-"G" G2 G G2 A | BGe d2 B | GAB "D" A2 A | "G" G3-G2 :||
+["G" G2 G G2 A | BGe d2 B | GAB "D" A2 A | "G" G3-G2 :|
+[LastTime "G" GBe d3| GBe d3 | GAB "D" A2 A | "G" G3-G2||
