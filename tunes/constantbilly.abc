@@ -1,13 +1,15 @@
 X: 1
-T: Constant Billy
-O: Adderbury
-C: Trad
-R: Morris
-M: 6/8
-L: 1/8
-K: G
-Z: ABC transcription by Verge Roller
-r: 24
-|: D | "G" G2 d BGB | "Am" c2 A "D" F2 D | "G"  BAG "C" E2 E | "D" DEF "G" G2 :|
-|: d | "G" Bcd "C" e2 e| "D" ABc "G" d2 d | "G" Bcd "C" e2 e | "Am" ABc "D" def |
-"G" g2 d BGB | "Am" c2 A "D" F2 D | "G" BAG "C" E2 E | "D" DEF "G" G2 :|
+T:Constant Billy - Oddington
+M:6/8
+L:1/8
+R: Rag Morris
+Z: Mackin and "The Rag Tune Book"
+W: Morris formula:  1/2A.(AB)6
+K:G
+P: A
+D | G2 d BGB | c2 A FED | BAG EFG| A2 G FED |
+G2 d BGB | c2 A FED |  BAG E2 E | DEF G3 ||
+P:B
+Bcd e3 | ABc d3 | Bcd e3 | ABc def |
+g2 d BGB | c2 A FED |  BAG E2 E | DEF G3 ||
+r:16

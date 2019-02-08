@@ -2,15 +2,14 @@ X: 1
 T:Ring o' Bells - Lichfield
 R: Rag Morris
 Q:120
-M:2/4
+M:2/2
 L:1/8
-Z: Mackin and the Ring
+Z: Mackin, Michael Greene and the Ring
 W: Warning: morris dancers will go into the pub at the end.
-W: Morris formula: A.(AB)6
+W: Morris formula: 1/2A.(AB)5.A [pause for applause] B
 K:G
 P:A
-B2 A2|Gc B2|AG FG |B2 A2|
-B2 A2|Gc B2|Ad d^c|d2 cd||
+|: B2 A2 Gc B2|AG FG  B2 A2| B2 A2 Gc B2|[1-5 Ad d^cd2 B=c :| [6 [M: 6/4]Ad d^c Hd4 B2=c2 ||
 P:B
-|: d2 c2|Bg e2|d2 c2 |Bg e2|
-dG c2|BF Gc|B2 A>G|G2 Ac :|
+|: d2 c2 Bg e2|d2 c2  Bg e2| dG c2 BF Gc|[1 B2 A2 G2 Ac :|[2 B2 A2 G2 GA ||
+r: 16
