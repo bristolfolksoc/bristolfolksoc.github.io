@@ -1,13 +1,17 @@
-X: 1
-T: Orange and Blue
-C: Trad
-R: Strathspey
-M: 4/4
-L: 1/8
-K: D
-Z: ABC transcription by Verge Roller
-r: 32
-|: a>g | "D" f-<d d2 A-<d d2 | f>d a>f d2 ef | "Em" g-<e e2 B-<e e2 | "A7" c>A e>c A2 a>g |
-"D" f-<d d2 A-<d d2 | "D" f>d a>f d2 (3fga | "G" b>g "D" a>f "A7" g>e "D" f>d | "A" e>c (3ABc "D" d2 :|
-|: a>g | "D" f-<a a2 "F#m" f-<a a2 | "Bm" f>d a>f "D" d2 e>f | "Em" g-<b b2 "G" g-<b b2 | "Em" g>e b>g "A7" e2 f>g |
-"D" f-<a a2 "F#m" f-<a a2 | "Bm" f>d a>f "D" d2 (3fga | "G" b>g "D" a>f "A7" g>e "D" f>d | "A7" e>c (3ABc "D" d2 :|
+X:16
+T: Orange and Blue - Sherborne
+T: The Orange in Bloom
+M: 6/8
+L: 1/8 
+R: Rag Morris
+K: G
+C: Trad 
+Z: ABC by Michael Greene & Mackin
+W: Music formula for morris dance: (AB)5
+r:24
+[P:A]D  [Q: 3/8 = 120]|: "C"EGE "G"DG"D"A | "G" BdB "D"A2 B/A/ | G"C"EE "G" DGA | [1 "G" B/A/G"D"F "G"G2 D :|
+[2 "G" B/A/G"D"F "G"G2 "D" A | [3 "G" B/A/G"D"F "G"(2G"D"A || [P:B] "G" B3/A/B/c/ "G/E"d2 B | "D"A3/G/A "G"Bcd|
+"C" edB "D" A3/G/A| "G" BAG "C" E2 D | "C" EGE "G" DG"D"A | "G" BdB "D" A2 B/A/| 
+G"C"EE "G"DG"D"A|[1,2 "G" B/A/G"D"F "G" G2 "D" A:|[3 "G" B/A/G"D"F "G" G2 D ||: [P: SlowB] [Q: 3/8 = 80]  "G" (2B/A/ B/c/ "G/E"(2dB| 
+"D"(2A/G/A "G" (2B/c/d | "C" (2e/d/B "D" (2A/G/A | "G" (2B/A/G E2 D| "C" EGE "G" DG"D"A | 
+"G" BdB "D" A2 B/A/ |G"C"EE DGA | [1 "G" B/A/G"D"F "G"(2G"D"A]:|[2"G" B/A/G"D"F "G" G2 d || 
