@@ -1,11 +1,12 @@
 X: 1
 T: Drummond Castle
 R: Jig
+C: Trad
 M: 6/8
 L: 1/8
 K: Amin
 r: 32
-|:ABA a2 (a|{b}a)ge g3|c3 edc|Bdg dBG|
-(ABA) a3|a(ge) g3|1 ege deg|edB A3:|2 ege deg|edB A2 B||
-|:c3 cec|d3 ded|c3 edc|Bdg dBG|
-c3 edc|deg a2 (a|{b}a)ge deg|1 edB A2 B:|2 edB A3||
+"Am" ABA a3 | age g3| "C" c2 c edc | "G" Bdg dBG |
+"Am" ABA a3| age g2 g | "C" ege deg |1 "Em" edB A2G :|2 "Em" edB A2B ] |
+|: "Am" c3 cec| "Dm" d3 ded| "Am"c3 edc| "G" Bdg dBG|
+"Am" c3 edc|"Dm"deg "C"a2 a|age  deg|1 "Em" edB A2 B:|2 "Em" edB A3||
