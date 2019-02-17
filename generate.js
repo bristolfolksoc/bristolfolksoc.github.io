@@ -107,19 +107,21 @@ function ParseDirectoryRecursvie(dir)
     GetAllTunes(dir).then((tunes) => {
       let tuneobjs = [];
       let tunespromises = [];
-      tunes.forEach(function(tune) {
 
+      tunes.forEach(function(tune) {
         tunespromises.push(
           ParseTune(tune).then((tuneobj) => {
             if(tuneobj != null)
             {
               delete tuneobj.abc;
               delete tuneobj.key;
+
               tuneobjs.push(tuneobj);
             }
           })
         );
       });
+
 
       Promise.all(tunespromises).then(() => {
         resolve(tuneobjs);
@@ -147,7 +149,7 @@ function RenderTunes(tunes)
       }
 
       renders++;
-      const abc_ps = exec('abcm2ps -O= -c --composerspace -0.65cm --pagescale 0.65 --staffscale 1.5 ' + tune);
+      const abc_ps = exec('abcm2ps -O= -c --composerspace -0.65cm --pagescale 0.75 --staffscale 1.5 ' + tune);
 
       let output = "";
       abc_ps.stdout.on('data', (data) => {
@@ -237,7 +239,8 @@ function GetTunesFromFilter(tunes, filter, only)
         if(typediff != 0) return typediff;
         else if(bardiff != 0) return bardiff;
 
-        return tune1.title.localeCompare(tune2.title);
+        //return tune1.title.localeCompare(tune2.title);
+        return 0;
       });
 
       resolve(out);
