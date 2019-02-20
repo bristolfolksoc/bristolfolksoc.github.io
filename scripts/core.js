@@ -208,25 +208,83 @@ function MidiListenerCallback(abcjsElement, currentEvent, context)
   }
 }
 
-function MatchesFilter(inText, filter)
+function RenderTitle(name)
 {
-  filter = filter.trim();
-  if(filter.length == 0) return true;
+  // remove the comman notation from a title
+  // Seven Stars, The ==>> The Seven Stars
+  let idx = name.lastIndexOf(",");
 
-  var text = inText.toLowerCase();
-  var filters = filter.toLowerCase().split(" ");
+  if(idx != -1)
+  {
+    return (name.substr(idx + 1) + " " + name.substr(0, idx)).trim();
+  }
 
-  var result = false;
+  return name;
+}
 
-  filters.forEach(function(fi) {
-    if(text.search(fi) != -1)
-    {
-      result = true;
-      return;
-    }
+
+function FuzzySearch(array, query, inKey, outKey)
+{
+  let totalScore = 0;
+  query = query.trim().toLowerCase().replace(" ", "");
+
+  array.forEach(function(item) {
+    let score = 0;
+
+    item[inKey].forEach(function(string, idx) {
+      let origStr = string.trim();
+      let outStr = "";
+
+      string = origStr.toLowerCase();
+
+      for(let j = 0; j < string.length; j++) {
+        let maxOffset = 1;
+
+        for(let i = 0; i < query.length; i++) {
+          let offset = 0;
+          let c = string[j];
+          let q = query[i];
+
+          while(c == q)
+          {
+            // score based on how long this match is = longer is better
+            let lengthFactor = offset * offset;
+            // score based on the position of the query compared to the string (up to two points can be awared)
+            let positionFactor = 2 / (1 + Math.abs(i - j));
+
+            score = score + lengthFactor + positionFactor;
+            offset = offset + 1;
+
+            if(i + offset >= query.length || j + offset >= string.length) break;
+
+            q = query[i + offset];
+            c = string[j + offset];
+          }
+
+          if(offset > maxOffset)
+          {
+            maxOffset = offset;
+          }
+        }
+
+        if(maxOffset > 1) outStr += "*";
+        for(let k = 0; k < maxOffset; k++)
+        {
+          outStr += origStr[j + k];
+        }
+        if(maxOffset > 1) outStr += "*";
+
+        j += (maxOffset - 1);
+      }
+
+      item[inKey][idx] = outStr;
+    });
+
+    item[outKey] = score;
+    totalScore += score;
   });
 
-  return result;
+  return totalScore;
 }
 
 function GetABCHeader(abc, header)
@@ -437,7 +495,7 @@ function CreatePDFFromTuneData(tuneData, callback)
 
       return;
     }
-  
+
     if(yOffset + (data.svg.clientHeight * PDFNoteSize) >= 750)
     {
       doc.addPage();
@@ -609,38 +667,26 @@ function getHTMLParam(paramkey, defaultval = false)
   return defaultval;
 }
 
-function HighlightText(inText, filter)
+function HighlightText(inText, start, end)
 {
-  filter = filter.trim();
-  if(filter.length == 0) return inText;
+  let outText = "";
+  let idx = inText.indexOf("*");
+  let isStart = true;
 
-  var filters = filter.toLowerCase().split(" ");
+  while(idx != -1)
+  {
+    outText += inText.substr(0, idx);
 
-  return HighlightText_recursive(inText, filters);
-}
+    if(isStart) outText += start;
+    else outText += end;
 
-function HighlightText_recursive(inText, filters)
-{
-  var text = inText.toLowerCase();
-  if(text.length == 0) return "";
+    isStart = !isStart;
 
-  var lowestIdx = -1;
-  var lowestMatch = "";
+    inText = inText.substr(idx + 1);
+    idx = inText.indexOf("*");
+  }
 
-  filters.forEach(function(fi) {
-    var match = text.search(fi);
-
-    if(match != -1 &&
-        (lowestMatch == "" || match < lowestMatch))
-    {
-      lowestIdx = match;
-      lowestMatch = fi;
-    }
-  });
-
-  if(lowestIdx == -1) return inText;
-
-  return inText.substr(0,lowestIdx) + "<span class=\"highlighted-text\">" + inText.substr(lowestIdx, lowestMatch.length) + "</span>" + HighlightText_recursive(inText.substr(lowestIdx + lowestMatch.length), filters);
+  return outText + inText;
 }
 
 function GetTuneData(filename)

@@ -1,24 +1,32 @@
+var query = {
+  text: "",
+  favorite: false,
+  composer: "",
+  type: "",
+  bars: ""
+};
+
 window.addEventListener('load', function() {
   Initialise(OnTuneIndexLoaded);
 
   $("#keyword-search").on('input',function(e) {
-    OnSearchFilterChanged();
+    OnSearchFilterChanged(true);
   });
 
   $("#fav-filter").on('change', function(e) {
-    OnSearchFilterChanged();
+    OnSearchFilterChanged(false);
   });
 
   $("#composer-select").on('change', function(e) {
-    OnSearchFilterChanged();
+    OnSearchFilterChanged(false);
   });
 
   $("#type-select").on('change', function(e) {
-    OnSearchFilterChanged();
+    OnSearchFilterChanged(false);
   });
 
   $("#bars-select").on('change', function(e) {
-    OnSearchFilterChanged();
+    OnSearchFilterChanged(false);
   });
 });
 
@@ -57,10 +65,8 @@ function OnTuneIndexLoaded()
     if(pageIndex < 0) pageIndex = 0;
   }
 
-  UpdateFilteredTunes();
+  UpdateSearchResults();
 }
-
-function GetFilter() { return $("#keyword-search").val().trim();}
 
 function clearSearch(param)
 {
@@ -85,22 +91,7 @@ function clearSearch(param)
     $("#bars-select").val("").change();
   }
 
-  UpdateFilteredTunes();
-}
-
-// returns true if the tune should be shown based on the search filter
-function PassesFilter(tune)
-{
-  var filterFav = $("#fav-filter").is(":checked");
-  var composerFilter = $("#composer-select option:selected").val();
-  var barFilter = $("#bars-select option:selected").val();
-  var typeFilter = $("#type-select option:selected").val();
-
-  return MatchesFilter(tune.title, GetFilter()) &&
-    (!filterFav || IsFavorite(tune.filename)) &&
-    (composerFilter == "" || tune.author == composerFilter) &&
-    (barFilter == "" || tune.bars == barFilter) &&
-    (typeFilter == "" || tune.type == typeFilter);
+  UpdateSearchResults();
 }
 
 var pageIndex = 0;
@@ -108,7 +99,7 @@ var pageIndex = 0;
 function SetPageIndex(newIndex)
 {
   pageIndex = newIndex;
-  UpdateFilteredTunes();
+  UpdateSearchResults();
 }
 
 function PrevPage()
@@ -122,78 +113,141 @@ function NextPage()
 }
 
 var filterChangedTimeout = 0;
-function OnSearchFilterChanged()
+function OnSearchFilterChanged(doTimeout)
 {
   if(filterChangedTimeout == 0)
-    $("#tune-container").html(`<p class="loading-spinner"><i class="fas fa-spinner fa-2x fa-spin"></i></p>`);
+    $("#loading-spinner").show();
 
-  clearTimeout(filterChangedTimeout);
-  filterChangedTimeout = setTimeout(function() {
+  let func = function() {
     pageIndex = 0;
     filterChangedTimeout = 0;
-    UpdateFilteredTunes();
-  }, 100);
+    UpdateSearchResults();
+  };
+
+  clearTimeout(filterChangedTimeout);
+  if(doTimeout)
+  {
+    filterChangedTimeout = setTimeout(func, 50);
+  }
+  else
+  {
+    func();
+  }
 }
 
 // update which tunes are shown based on the filter
-function UpdateFilteredTunes()
+function GetFilteredTunes()
 {
-  $("#tune-container").empty();
+  query.text = $("#keyword-search").val().trim();
+  query.favorite = $("#fav-filter").is(":checked");
+  query.composer = $("#composer-select option:selected").val().trim();
+  query.type = $("#type-select option:selected").val();
+  query.bars = $("#bars-select option:selected").val();
 
-  var tuneTemplate = function(tune, title) {
-    return `<div class="tune-entry">
-              <h1>${title}<i>(${tune.type})</i></h1>
-              <a href="javascript:void(0);" onclick="javascript:ViewMusicClicked('${tune.filename}', $(this));">
-                <button type="button" class="btn btn-outline-dark"><i class="fas fa-music"></i> View Music</button>
-              </a>
-              <a href="javascript:void(0);" onclick="javascript:PlayMIDIClicked('${tune.filename}', $(this))">
-                <button type="button" class="btn btn-outline-dark"><i class="fas fa-headphones"></i> Play MIDI</button>
-              </a>
-              <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}');  if(IsFavorite('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); }" class="fav-button ${IsFavorite(tune.filename) ? "active" : ""}">
-                <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> Favourite</button>
-              </a>
-              <a href="javascript:void(0);" onclick="javascript:AddToSetClicked('${tune.filename}', $(this));" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
-                <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
-              </a>
-              <div class="dropdown">
-                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:ViewABCClicked('${tune.filename}', $(this));">
-                    <i class="fas fa-download"></i> Show ABC
-                  </a>
-                  <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:OpenPDFModal(['${tune.filename}']);">
-                    <i class="fas fa-file-pdf"></i> Create Printout
-                  </a>
-                </div>
+  FilteredTunes = [];
+
+  TuneIndex.tunes.forEach(function(tune, idx) {
+    if(query.favorite && !IsFavorite(tune.filename)) return;
+    if(query.composer.length > 0 && tune.author != query.composer) return;
+    if(query.type.length > 0 && tune.type != query.type) return;
+    if(query.bars.length > 0 && tune.bars != query.bars) return;
+
+    let obj = {
+      "idx": idx,
+      "score": 0,
+      "text": [tune.title]
+    };
+
+    if(tune.altTitle != undefined)
+    {
+      obj.text.push(tune.altTitle);
+    }
+
+    FilteredTunes.push(obj);
+  });
+
+
+  if(query.text.length > 0)
+  {
+    let totalScore = FuzzySearch(FilteredTunes, query.text, "text", "score");
+    FilteredTunes.sort(function(a, b) {
+      return b.score - a.score;
+    });
+
+    let averageScore = totalScore / FilteredTunes.length;
+
+    for(let i = 0; i < FilteredTunes.length; i++)
+    {
+        if(FilteredTunes[i].score < averageScore)
+        {
+          FilteredTunes.splice(i, FilteredTunes.length - i);
+          break;
+        }
+    }
+  }
+
+  return FilteredTunes;
+}
+
+var tuneTemplate = function(tune, title) {
+  return `<div class="tune-entry">
+            <h1>${RenderTitle(title)}<i>(${tune.type})</i></h1>
+            <a href="javascript:void(0);" onclick="javascript:ViewMusicClicked('${tune.filename}', $(this));">
+              <button type="button" class="btn btn-outline-dark"><i class="fas fa-music"></i> View Music</button>
+            </a>
+            <a href="javascript:void(0);" onclick="javascript:PlayMIDIClicked('${tune.filename}', $(this))">
+              <button type="button" class="btn btn-outline-dark"><i class="fas fa-headphones"></i> Play MIDI</button>
+            </a>
+            <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}');  if(IsFavorite('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); }" class="fav-button ${IsFavorite(tune.filename) ? "active" : ""}">
+              <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> Favourite</button>
+            </a>
+            <a href="javascript:void(0);" onclick="javascript:AddToSetClicked('${tune.filename}', $(this));" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
+              <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
+            </a>
+            <div class="dropdown">
+              <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:ViewABCClicked('${tune.filename}', $(this));">
+                  <i class="fas fa-download"></i> Show ABC
+                </a>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="javascript:OpenPDFModal(['${tune.filename}']);">
+                  <i class="fas fa-file-pdf"></i> Create Printout
+                </a>
               </div>
-              <div class="abc-container" style="display:none">Loading...</div>
-              <div class="midi-container" onload="javascript:$this.hide()">
-                <div class="midi-container-hidden"></div>
-                <a href="javascript:void(0);" onclick="javascript:PlayMIDI($(this).parent());" class="btn-play">
-                  <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-play"></i> / <i class="fas fa-pause"></i></button>
-                </a>
-                <a href="javascript:void(0);" onclick="javascript:StopMIDI($(this).parent());">
-                  <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-step-backward"></i></button>
-                </a>
-                <div class="progress tune-playback-bar">
-                  <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <a href="javascript:void(0);" onclick="javascript:SetLooping($(this));" class="btn-loop">
-                  <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-sync"></i></button>
-                </a>
+            </div>
+            <div class="abc-container" style="display:none">Loading...</div>
+            <div class="midi-container" onload="javascript:$this.hide()">
+              <div class="midi-container-hidden"></div>
+              <a href="javascript:void(0);" onclick="javascript:PlayMIDI($(this).parent());" class="btn-play">
+                <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-play"></i> / <i class="fas fa-pause"></i></button>
+              </a>
+              <a href="javascript:void(0);" onclick="javascript:StopMIDI($(this).parent());">
+                <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-step-backward"></i></button>
+              </a>
+              <div class="progress tune-playback-bar">
+                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-              <div class="music-container" style="display:none">Loading...</div>
-            </div>`;
-  };
+              <a href="javascript:void(0);" onclick="javascript:SetLooping($(this));" class="btn-loop">
+                <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-sync"></i></button>
+              </a>
+            </div>
+            <div class="music-container" style="display:none">Loading...</div>
+          </div>`;
+};
+
+function UpdateSearchResults()
+{
+  var FilteredTunes = GetFilteredTunes();
+
+  $("#tune-container").empty();
 
   var count = 0;
   var maxperpage = 15;
   var skip = pageIndex * maxperpage;
+  var container = $("#tune-container");
 
-  TuneIndex.tunes.forEach(function(tune)
+  FilteredTunes.forEach(function(tune)
   {
-    if(!PassesFilter(tune)) return;
-
     count += 1;
 
     if(count <= skip || count > skip + maxperpage)
@@ -201,8 +255,8 @@ function UpdateFilteredTunes()
       return;
     }
 
-    var title = HighlightText(tune.title, GetFilter());
-    $("#tune-container").append(tuneTemplate(tune, title));
+    var title = HighlightText(tune.text[0], '<span class=\"highlighted-text\">', '</span>');
+    container.append(tuneTemplate(TuneIndex.tunes[tune.idx], title));
   });
 
   if(count == 0)
@@ -281,39 +335,37 @@ function UpdateFilteredTunes()
 
   badgeContainer.html("");
 
-  if(GetFilter() != "")
+  if(query.text != "")
   {
-    badgeContainer.append(badgeMarkup("\"" + GetFilter() + "\"", 0));
+    badgeContainer.append(badgeMarkup("\"" + query.text + "\"", 0));
   }
 
-  let cFilter = $("#composer-select option:selected").val();
-  if(cFilter != "")
+  if(query.composer != "")
   {
-    badgeContainer.append(badgeMarkup(cFilter, 2));
+    badgeContainer.append(badgeMarkup(query.composer, 2));
   }
 
-  var filterFav = $("#fav-filter").is(":checked");
-  if(filterFav != "")
+  if(query.favorite)
   {
     badgeContainer.append(badgeMarkup("Favorited", 1));
   }
 
-  var filterType = $("#type-select option:selected").val();
-  if(filterType != "")
+  if(query.type != "")
   {
-    badgeContainer.append(badgeMarkup(filterType, 3));
+    badgeContainer.append(badgeMarkup(query.type, 3));
   }
 
-  var filterBar = $("#bars-select option:selected").val();
-  if(filterBar != "")
+  if(query.bars != "")
   {
-    badgeContainer.append(badgeMarkup(filterBar + " Bar", 4));
+    badgeContainer.append(badgeMarkup(query.bars + " Bar", 4));
   }
 
   if(history)
   {
     history.replaceState(null, null, GenerateHotlinkURL());
   }
+
+  $("#loading-spinner").hide();
 }
 
 //determines the URL parameters for the current page state
@@ -321,34 +373,29 @@ function GenerateHotlinkURL()
 {
   let params = new Object();
 
-  let query = GetFilter();
-  if(query.length != 0)
+  if(query.text.length != 0)
   {
-    params["q"] = query;
+    params["q"] = query.text;
   }
 
-  var composerFilter = $("#composer-select option:selected").val().trim();
-  if(composerFilter.length != 0)
+  if(query.composer.length != 0)
   {
-    params["c"] = composerFilter;
+    params["c"] = query.composer;
   }
 
-  var filterFav = $("#fav-filter").is(":checked");
-  if(filterFav)
+  if(query.favorite)
   {
     params["fav"] = 1;
   }
 
-  var filterType = $("#type-select option:selected").val();
-  if(filterType != "")
+  if(query.type != "")
   {
-    params["t"] = filterType;
+    params["t"] = query.type;
   }
 
-  var filterBar = $("#bars-select option:selected").val();
-  if(filterBar != "")
+  if(query.bars != "")
   {
-    params["b"] = filterBar;
+    params["b"] = query.bars;
   }
 
   if(pageIndex != 0)
