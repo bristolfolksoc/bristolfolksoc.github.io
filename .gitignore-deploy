@@ -1,3 +1,9 @@
 _site/
+*.log
+*.aux
+*.ilg
+*.ind
+*.idx
 builttunes
 out-abc.sh
+travis/

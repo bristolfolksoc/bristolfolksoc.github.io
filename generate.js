@@ -163,6 +163,7 @@ function RenderTunes(tunes)
         if(code != 0)
         {
           console.log(output);
+          return;
         }
 
         const ps_eps = exec('ps2eps -f ' + psfile);
