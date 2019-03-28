@@ -1,15 +1,14 @@
-X: 1
-T:Constant Billy - Oddington
+X: 47
+T: Constant Billy - Oddington
 M:6/8
 L:1/8
-R: Rag Morris
-Z: Mackin and "The Rag Tune Book"
-W: Morris formula:  1/2A.(AB)6
+W: Dance formula (A2B2)3
+Z: Mackin, Michael Greene, and Grand Union Morris. 
 K:G
-P: A
-D | G2 d BGB | c2 A FED | BAG EFG| A2 G FED |
-G2 d BGB | c2 A FED |  BAG E2 E | DEF G3 ||
-P:B
-Bcd e3 | ABc d3 | Bcd e3 | ABc def |
-g2 d BGB | c2 A FED |  BAG E2 E | DEF G3 ||
-r:16
+r: 32
+P: A 
+GBd cAB | c2 A AGA | B2 G EFG | ABG FED |
+ GBd cAB | c2 A AGA | B2 G E2 E | DEF G3 ||
+P: B
+Bcd ecA | B2 c dBG | Bcd e2 e |
+ ABc dBG | GBd cAB | c2 A AGA | B2 GE2 E | DEF G3 ||
