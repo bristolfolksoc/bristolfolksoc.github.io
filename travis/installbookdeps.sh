@@ -8,9 +8,9 @@ mkdir -p ./download
 
 cd download
 
-sudo apt-add-repository ppa:anton+/photo-video-apps;
+sudo apt-add-repository -y ppa:anton+/photo-video-apps;
 sudo apt-get update;
-sudo apt-get install ghostscript;
+sudo apt-get -y install ghostscript;
 
 if [ ! -d "abcm2ps" ]; then
   git clone https://github.com/leesavide/abcm2ps.git
