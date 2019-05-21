@@ -162,7 +162,7 @@ function RenderTunes(tunes)
       abc_ps.on('exit', (code) => {
         if(code != 0)
         {
-          console.log("PS err: " + output);
+          console.log("PS err [" + code + "]: " + psfile + "\n" + output);
           renders--;
           if(renders == 0) resolve(tunes);
           return;
@@ -180,7 +180,7 @@ function RenderTunes(tunes)
         ps_eps.on('exit', (code) => {
           if(code != 0)
           {
-            console.log("EPS err: " + output);
+            console.log("EPS err [" + code + "]: " + epsfile + "\n" + output);
             renders--;
             if(renders == 0) resolve(tunes);
             return;
@@ -198,7 +198,7 @@ function RenderTunes(tunes)
           eps_pdf.on('exit', (code) => {
             if(code != 0)
             {
-              console.log("PDF err: " + output);
+              console.log("PDF err [" + code + "]: " + pdffile + "\n" + output);
             }
 
             renders--;
