@@ -19,6 +19,7 @@ before_install:
 
 script:
   - node generate.js
+  - node generate.js --books
   - npm test;
 
 after_success:
