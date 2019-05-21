@@ -45,13 +45,14 @@ if [ ! -d "epstopdf" ]; then
 
    unzip ./epstopdf.zip
 
-   rm eps2pdf.zip
+   rm epstopdf.zip
 
-   chmod a+x ./epstopdf/epstopdf.pl
+   mv ./epstopdf/epstopdf.pl ./epstopdf/epstopdf
+   chmod a+x ./epstopdf/epstopdf
 fi
 
 WD="$(pwd)";
-export PATH="$PATH:$WD/ps2eps/bin:$WD/abcm2ps:$WD/eps2pdf"
+export PATH="$PATH:$WD/ps2eps/bin:$WD/abcm2ps:$WD/epstopdf"
 
 cd ..
 
