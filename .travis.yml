@@ -14,7 +14,7 @@ before_install:
   - cd ./travis/
   - ./installbookdeps.sh
   - WD="$(pwd)";
-  - export PATH="$PATH:$WD/download/ps2eps/bin:$WD/download/abcm2ps:$WD/epstopdf"
+  - export PATH="$PATH:$WD/download/ps2eps/bin:$WD/download/abcm2ps:$WD/download/epstopdf"
   - cd ..
 
 script:
