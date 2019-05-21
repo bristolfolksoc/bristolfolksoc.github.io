@@ -15,16 +15,11 @@ before_install:
   - ./installbookdeps.sh
   - cd ..
 
-script: npm test;
+script:
+  - node generate.js
+  - npm test;
 
 after_success:
-  - node generate.js
-  - git config --global user.email "deploy@travis-ci.org"
-  - git config --global user.name "Deployment Bot"
-  - rm .gitignore
-  - mv .gitignore-deploy .gitignore
-  - git checkout -b master
-  - git add -A
-  - git commit -m "Build $TRAVIS_BUILD_NUMBER"
-  - git remote add origin-pages https://${GITHUB_TOKEN}@github.com/bristolfolksoc/bristolfolksoc.github.io.git > /dev/null 2>&1
-  - git push --quiet -f origin-pages master
+  - cd ./travis/
+  - ./deploy.sh
+  - cd ..
