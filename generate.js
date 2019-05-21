@@ -162,15 +162,45 @@ function RenderTunes(tunes)
       abc_ps.on('exit', (code) => {
         if(code != 0)
         {
-          console.log(output);
+          console.log("PS err: " + output);
+          renders--;
+          if(renders == 0) resolve(tunes);
           return;
         }
 
+        output = "";
         const ps_eps = exec('ps2eps -f ' + psfile);
+        ps_eps.stdout.on('data', (data) => {
+          output += data.toString();
+        });
+        ps_eps.stderr.on('data', (data) => {
+          output += data.toString();
+        });
+
         ps_eps.on('exit', (code) => {
+          if(code != 0)
+          {
+            console.log("EPS err: " + output);
+            renders--;
+            if(renders == 0) resolve(tunes);
+            return;
+          }
+
+          output = "";
           const eps_pdf = exec('epstopdf ' + epsfile);
+          eps_pdf.stdout.on('data', (data) => {
+            output += data.toString();
+          });
+          eps_pdf.stderr.on('data', (data) => {
+            output += data.toString();
+          });
 
           eps_pdf.on('exit', (code) => {
+            if(code != 0)
+            {
+              console.log("PDF err: " + output);
+            }
+
             renders--;
             if(renders == 0) resolve(tunes);
           });
