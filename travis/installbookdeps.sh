@@ -8,6 +8,8 @@ mkdir -p ./download
 
 cd download
 
+sudo apt-add-repository ppa:anton+/photo-video-apps;
+sudo apt-get update;
 sudo apt-get install ghostscript;
 
 if [ ! -d "abcm2ps" ]; then
