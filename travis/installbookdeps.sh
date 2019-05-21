@@ -8,6 +8,8 @@ mkdir -p ./download
 
 cd download
 
+sudo apt-get install ghostscript;
+
 if [ ! -d "abcm2ps" ]; then
   git clone https://github.com/leesavide/abcm2ps.git
 
@@ -37,8 +39,19 @@ if [ ! -d "ps2eps" ]; then
    cd ..
 fi
 
+
+if [ ! -d "epstopdf" ]; then
+   curl -L http://mirrors.ctan.org/support/epstopdf.zip -o ./epstopdf.zip
+
+   unzip ./epstopdf.zip
+
+   rm eps2pdf.zip
+
+   chmod a+x ./epstopdf/epstopdf.pl
+fi
+
 WD="$(pwd)";
-export PATH="$PATH:$WD/ps2eps/bin:$WD/abcm2ps"
+export PATH="$PATH:$WD/ps2eps/bin:$WD/abcm2ps:$WD/eps2pdf"
 
 cd ..
 
@@ -56,4 +69,4 @@ ps2eps -V
 
 echo ""
 echo "EPSTOPDF"
-#epstopdf -V
+epstopdf --version
