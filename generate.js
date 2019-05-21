@@ -149,7 +149,7 @@ function RenderTunes(tunes)
       }
 
       renders++;
-      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --composerspace -0.65cm --pagescale 0.75 --staffscale 1.5 ' + tune);
+      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --composerspace -0.65cm --pagescale 0.75 --staffscale 1.5 -q ' + tune);
 
       let output = "";
       abc_ps.stdout.on('data', (data) => {
@@ -165,7 +165,7 @@ function RenderTunes(tunes)
           console.log("PS err [" + code + "]: " + psfile + "\n" + output);
           renders--;
           if(renders == 0) resolve(tunes);
-          return;
+          //return;
         }
 
         output = "";
