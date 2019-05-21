@@ -12,7 +12,9 @@ cache:
 
 before_install:
   - cd ./travis/
-  - source ./installbookdeps.sh
+  - ./installbookdeps.sh
+  - WD="$(pwd)";
+  - export PATH="$PATH:$WD/download/ps2eps/bin:$WD/download/abcm2ps"
   - cd ..
 
 script:

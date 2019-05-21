@@ -40,10 +40,20 @@ fi
 WD="$(pwd)";
 export PATH="$PATH:$WD/ps2eps/bin:$WD/abcm2ps"
 
+cd ..
+
 # TESTING
 echo ""
 echo "*** Testing Book Dependancies ***"
 echo ""
+
+echo "ABCM2PS"
 abcm2ps -V
+
+echo ""
+echo "PS2EPS"
 ps2eps -V
+
+echo ""
+echo "EPSTOPDF"
 #epstopdf -V
