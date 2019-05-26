@@ -10,6 +10,12 @@ cache:
   directories:
   - node_modules
 
+tex-config:
+  tex-scheme=small
+  push-type=none
+  build-pattern=*.tex
+  packages=lipsum, abc
+
 before_install:
   - cd ./travis/
   - ./installbookdeps.sh
