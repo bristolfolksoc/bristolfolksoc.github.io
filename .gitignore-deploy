@@ -4,6 +4,7 @@ _site/
 *.ilg
 *.ind
 *.idx
-#builttunes
+builttunes
 out-abc.sh
 travis/
+node_modules_full/
