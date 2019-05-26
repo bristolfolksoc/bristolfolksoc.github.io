@@ -24,8 +24,8 @@ before_install:
   - cd ..
 
 script:
-  - node generate.js
-  - node generate.js --books
+  - node generate.js index
+  - node generate.js books
   - npm test;
 
 after_success:

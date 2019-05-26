@@ -514,7 +514,7 @@ if(GenBooks)
 
       if(files.length > 0)
       {
-        const latex = exec('sudo docker run --mount src=' + __dirname + ',target=/repo,type=bind strauman/travis-latexbuild:small');
+        const latex = exec('docker run --mount src=' + __dirname + ',target=/repo,type=bind strauman/travis-latexbuild:small');
 
         let output = "";
         latex.stdout.on('data', (data) => {

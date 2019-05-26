@@ -8,6 +8,8 @@ mkdir -p ./download
 
 cd download
 
+docker pull strauman/travis-latexbuild:small
+
 sudo apt-add-repository -y ppa:anton+/photo-video-apps;
 sudo apt-get update;
 sudo apt-get -y install ghostscript;
