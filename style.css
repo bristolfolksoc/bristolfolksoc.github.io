@@ -9,6 +9,25 @@
   padding-bottom: 40px;
 }
 
+@media (max-width: 768px)
+{
+  .container
+  {
+    padding-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: unset;
+  }
+
+  .music-container
+  {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
 .outer-container
 {
   min-height: 100%;
@@ -54,6 +73,7 @@ footer a
 {
   background-color: #ae31ad;
   color: #fff;
+  z-index: 600;
 }
 
 .nav, .nav a
@@ -69,7 +89,7 @@ footer a
 
 .navbar-shadow
 {
-  position: fixed;
+  position: absolute;
   z-index: 512;
   top: 60px;
   width: 100%;

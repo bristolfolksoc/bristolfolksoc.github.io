@@ -34,7 +34,7 @@ let AutoTrim = (str) => {
   return str.trim().replace("*", "");
 };
 
-let ParseTune = (filepath) => {
+let ParseTune = (filepath, baseTime) => {
   return new Promise(function(resolve, reject) {
     fs.readFile(filepath, (err, data) => {
       if(err)
@@ -42,6 +42,9 @@ let ParseTune = (filepath) => {
         console.log("Error opening file : " + err);
         resolve(null);
       }
+
+      let stats = fs.lstatSync(filepath);
+      let ctime = Math.floor((stats.mtime.getTime() - baseTime) / 86400000);
 
       // convert data to a string
       let abc = data + '';
@@ -52,6 +55,7 @@ let ParseTune = (filepath) => {
         author:  AutoTrim(GetABCParam(abc, "C", "Anon.")),
         bars:  AutoTrim(GetABCParam(abc, "r", "0")),
         key: AutoTrim(GetABCParam(abc, "K", "")),
+        ctime: ctime,
         filename: filepath,
         abc:abc
       };
@@ -102,7 +106,7 @@ function GetAllTunes(dir)
   });
 }
 
-function ParseDirectoryRecursvie(dir)
+function ParseDirectoryRecursvie(dir, baseTime)
 {
   return new Promise(function(resolve, reject) {
     GetAllTunes(dir).then((tunes) => {
@@ -111,7 +115,7 @@ function ParseDirectoryRecursvie(dir)
 
       tunes.forEach(function(tune) {
         tunespromises.push(
-          ParseTune(tune).then((tuneobj) => {
+          ParseTune(tune, baseTime).then((tuneobj) => {
             if(tuneobj != null)
             {
               delete tuneobj.abc;
@@ -286,7 +290,7 @@ function GetTunesFromFilter(tunes, filter, only)
       }
 
       count++;
-      ParseTune(tunefilename).then((tune) => {
+      ParseTune(tunefilename, 0).then((tune) => {
         let result = eval(filter);
         tune.filename = tunefilename.substr(10);
         if(result === true)
@@ -558,7 +562,8 @@ if(GenBooks)
 if(GenIndex)
 {
   console.log("Building tune database");
-  ParseDirectoryRecursvie("./tunes").then((tunes) => {
+  let baseTime = Date.now() - (Date.now() % 86400000);
+  ParseDirectoryRecursvie("./tunes", baseTime).then((tunes) => {
     tunes.sort(function(a,b) {
       if (a.title < b.title)
         return -1;
@@ -568,7 +573,7 @@ if(GenIndex)
     });
 
     let obj = {
-      genTime: Date.now(),
+      genTime: baseTime ,
       tunes: tunes
     };
     fs.writeFile("./tunes.json", JSON.stringify(obj), () => {});
