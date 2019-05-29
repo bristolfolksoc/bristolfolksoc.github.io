@@ -28,6 +28,10 @@ window.addEventListener('load', function() {
   $("#bars-select").on('change', function(e) {
     OnSearchFilterChanged(false);
   });
+
+  $("#sort-select").on('change', function(e) {
+    OnSearchFilterChanged(false);
+  });
 });
 
 function OnTuneIndexLoaded()
@@ -238,6 +242,32 @@ var tuneTemplate = function(tune, title) {
 function UpdateSearchResults()
 {
   var FilteredTunes = GetFilteredTunes();
+
+  let sortingOption = $("#sort-select option:selected").val().trim();
+
+  if(sortingOption == "alphabetical" || sortingOption == "revalphabetical")
+  {
+    // hacky check to see if any search filter was actually applied
+    if(FilteredTunes.length != TuneIndex.length)
+    {
+      FilteredTunes.sort(function(a, b) {
+        return a.text > b.text;
+      });
+    }
+  }
+
+  if(sortingOption == "newest" || sortingOption == "oldest")
+  {
+    // hacky check to see if any search filter was actually applied
+    FilteredTunes.sort(function(a, b) {
+      return TuneIndex.tunes[b.idx].ctime - TuneIndex.tunes[a.idx].ctime;
+    });
+  }
+
+  if(sortingOption == "oldest" || sortingOption == "revalphabetical")
+  {
+    FilteredTunes.reverse();
+  }
 
   $("#tune-container").empty();
 
