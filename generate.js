@@ -2,7 +2,7 @@
 
 var TUNEBOOK_TEMPLATE = "printed_tunebook.textemplate"
 const fs = require('fs');
-const { exec } = require('child_process');
+const { exec, execSync } = require('child_process');
 const del = require('del');
 
 // returns the specified parameter of the ABC file as a string or a default value if it doesn't exist
@@ -44,7 +44,21 @@ let ParseTune = (filepath, baseTime) => {
       }
 
       let stats = fs.lstatSync(filepath);
-      let ctime = Math.floor((stats.mtime.getTime() - baseTime) / 86400000);
+      let cmd = "git log --reverse --format=%ai \"" + filepath + "\"";
+
+      let stdout = execSync(cmd) + "";
+      stdout = stdout.split('\n')[0];
+
+      let jsDate = new Date(stats.mtime.getTime());
+
+      let parts = stdout.split(' ');
+      if(parts.length == 3)
+      {
+        let str = parts[0] + "T" + parts[1] + parts[2];
+        jsDate = new Date(Date.parse(str));
+      }
+
+      let ctime = Math.floor((jsDate - baseTime) / 86400000);
 
       // convert data to a string
       let abc = data + '';
