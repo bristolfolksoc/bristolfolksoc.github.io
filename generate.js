@@ -497,7 +497,7 @@ function CopyTunesWithExensions(tunes)
       let comp = GetABCParam(abc, 'C');
 
       let key = GetABCParam(abc, 'K');
-      key = key.replace("maj");
+      key = key.replace("maj", "");
       key = key.replace("min", "m");
 
       abc = SetABCHeader(abc, 'C', key);
