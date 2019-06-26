@@ -495,7 +495,11 @@ function CopyTunesWithExensions(tunes)
       streams++;
       let abc = fs.readFileSync(tune) + "";
       let comp = GetABCParam(abc, 'C');
+
       let key = GetABCParam(abc, 'K');
+      key = key.replace("maj");
+      key = key.replace("min", "m");
+
       abc = SetABCHeader(abc, 'C', key);
       abc = SetABCHeader(abc, 'H', comp);
 
