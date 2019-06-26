@@ -191,7 +191,7 @@ function RenderTunes(tunes)
       }
 
       renders++;
-      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --pagescale 0.75 --staffscale 1.5 --infoname R --infoline 1 --infospace -0.45cm --aligncomposer -1 -q ' + tune);
+      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --pagescale 0.75 --staffscale 1.5 --infoname H --infoline 1 --infospace -0.45cm --aligncomposer -1 -q ' + tune);
 
       let output = "";
       abc_ps.stdout.on('data', (data) => {
@@ -497,7 +497,7 @@ function CopyTunesWithExensions(tunes)
       let comp = GetABCParam(abc, 'C');
       let key = GetABCParam(abc, 'K');
       abc = SetABCHeader(abc, 'C', key);
-      abc = SetABCHeader(abc, 'R', comp);
+      abc = SetABCHeader(abc, 'H', comp);
 
       fs.writeFile(newpath, abc, () => {
         streams--;
