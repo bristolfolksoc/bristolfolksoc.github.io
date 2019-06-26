@@ -302,26 +302,35 @@ function TypeOrder(type)
   return order.length + (type.charCodeAt(0) - 65);
 }
 
-function GetTunesFromFilter(tunes, filter, only)
+function GetTunesFromFilter(tunes, filter, only, sort)
 {
   return new Promise(function(resolve, reject) {
     let out = [];
     let count = 1;
+    let onlycpy = only.slice();
     let done = function()
     {
-      out.sort(function(tune1, tune2) {
-      });
+      if(sort)
+      {
+        out.sort(function(tune1, tune2) {
+          let typediff = TypeOrder(tune1.type.toLowerCase()) - TypeOrder(tune2.type.toLowerCase());
+          let bardiff = tune1.bars - tune2.bars;
 
-      out.sort(function(tune1, tune2) {
-        let typediff = TypeOrder(tune1.type.toLowerCase()) - TypeOrder(tune2.type.toLowerCase());
-        let bardiff = tune1.bars - tune2.bars;
+          if(typediff != 0) return typediff;
+          else if(bardiff != 0) return bardiff;
 
-        if(typediff != 0) return typediff;
-        else if(bardiff != 0) return bardiff;
-
-        //return tune1.title.localeCompare(tune2.title);
-        return 0;
-      });
+          //return tune1.title.localeCompare(tune2.title);
+          return 0;
+        });
+      }
+      else if(onlycpy != undefined)
+      {
+        // ironically not-sorting still means we have to sort
+        // as the files may have been picked up in a different order to that specified in the only array
+        out.sort(function(tune1, tune2) {
+          return onlycpy.indexOf(tune1.filename.substr(1)) - onlycpy.indexOf(tune2.filename.substr(1));
+        });
+      }
 
       resolve(out);
     }
@@ -329,8 +338,10 @@ function GetTunesFromFilter(tunes, filter, only)
     tunes.forEach(function(tunefilename) {
       if(only != undefined)
       {
-        if(!only.includes(tunefilename.substr(11))) return;
-        only.splice(only.indexOf(tunefilename.substr(11)), 1);
+        let idx = only.indexOf(tunefilename.substr(11));
+        if(idx == -1) return;
+        only.splice(idx, 1);
+        //console.log(tunefilename + "  =>  " + tunefilename.substr(11));
       }
 
       count++;
@@ -386,8 +397,14 @@ function GenerateTunebook(allTunes, book)
       console.log("Error opening file : " + err);
       resolve(null);
     }
+    let sort = true;
 
-    GetTunesFromFilter(allTunes, book.tunefilter, book.only).then((tunes) => {
+    if(book.keepOrder != undefined && book.keepOrder == true)
+    {
+      sort = false;
+    }
+
+    GetTunesFromFilter(allTunes, book.tunefilter, book.only, sort).then((tunes) => {
       if(tunes.length == 0)
       {
         console.log("Tunebook " + book.name + " does not contain any tunes, skipping");
@@ -419,7 +436,8 @@ function GenerateTunebook(allTunes, book)
         if(curType != tune.type.toLowerCase())
         {
           curType = tune.type.toLowerCase();
-          tuneStr += "\\subsection{" + tune.type + "}\n";
+          if(book.showTypeHeadings == undefined || book.showTypeHeadings == true)
+            tuneStr += "\\subsection{" + tune.type + "}\n";
         }
 
         tuneStr += "\\tune{builttunes/" + tune.filename.substr(0, tune.filename.length - 4) + "}{" + tune.title + "}\n";
@@ -597,7 +615,7 @@ if(GenBooks)
             files.forEach(function(file) {
               let book = JSON.parse(fs.readFileSync("books/" + file));
 
-              fs.unlink(book.name + ".tex");
+              //fs.unlink(book.name + ".tex");
               fs.unlink(book.name + ".log");
               fs.unlink(book.name + ".ind");
               fs.unlink(book.name + ".idx");
