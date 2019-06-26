@@ -307,7 +307,7 @@ function GetTunesFromFilter(tunes, filter, only, sort)
   return new Promise(function(resolve, reject) {
     let out = [];
     let count = 1;
-    let onlycpy = only.slice();
+    let onlycpy = only == undefined ? undefined : only.slice();
     let done = function()
     {
       if(sort)
