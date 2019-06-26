@@ -16,7 +16,8 @@
     "popper.js": "^1.12.9"
   },
   "devDependencies": {
-    "njekyll": "^1.1.0"
+    "njekyll": "^1.1.0",
+    "del": "^4.1.1"
   },
   "scripts": {
     "test": "echo \"No tests specified\" && exit 0"

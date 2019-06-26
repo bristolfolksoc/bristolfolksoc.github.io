@@ -2,6 +2,9 @@ language: node_js
 node_js:
 - '6'
 
+git:
+  depth: false
+
 branches:
   only:
     - development
@@ -9,6 +12,12 @@ branches:
 cache:
   directories:
   - node_modules
+
+tex-config:
+  tex-scheme=small
+  push-type=none
+  build-pattern=*.tex
+  packages=lipsum, abc
 
 before_install:
   - cd ./travis/
@@ -18,8 +27,8 @@ before_install:
   - cd ..
 
 script:
-  - node generate.js
-  - node generate.js --books
+  - node generate.js index
+  - node generate.js books
   - npm test;
 
 after_success:

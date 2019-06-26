@@ -28,6 +28,10 @@ window.addEventListener('load', function() {
   $("#bars-select").on('change', function(e) {
     OnSearchFilterChanged(false);
   });
+
+  $("#sort-select").on('change', function(e) {
+    OnSearchFilterChanged(false);
+  });
 });
 
 function OnTuneIndexLoaded()
@@ -38,7 +42,7 @@ function OnTuneIndexLoaded()
   $("#lbl-num-in-set").show();
 
   var d = new Date(TuneIndex.genTime);
-  $("#updateTime").html("Last updated " + dateToString(d));
+  //$("#updateTime").html("Last updated " + dateToString(d));
 
   UpdateComposerList();
   UpdateTypesList();
@@ -199,10 +203,10 @@ var tuneTemplate = function(tune, title) {
               <button type="button" class="btn btn-outline-dark"><i class="fas fa-headphones"></i> Play MIDI</button>
             </a>
             <a href="javascript:void(0);" onclick="javascript:ToggleFavorite('${tune.filename}');  if(IsFavorite('${tune.filename}')) { $(this).addClass('active'); } else { $(this).removeClass('active'); }" class="fav-button ${IsFavorite(tune.filename) ? "active" : ""}">
-              <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> Favourite</button>
+              <button type="button" class="btn btn-outline-dark btn-favorite"><i class="fas fa-heart ico-favorite"></i> <span class="d-none d-sm-inline-block">Favourite</span></button>
             </a>
             <a href="javascript:void(0);" onclick="javascript:AddToSetClicked('${tune.filename}', $(this));" class="set-button ${IsInSet(tune.filename) ? "active" : ""}">
-              <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Add to Set</button>
+              <button type="button" class="btn btn-outline-dark"><i class="fas fa-plus"></i> <span class="d-none d-sm-inline-block">Add to Set</span></button>
             </a>
             <div class="dropdown">
               <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
@@ -238,6 +242,32 @@ var tuneTemplate = function(tune, title) {
 function UpdateSearchResults()
 {
   var FilteredTunes = GetFilteredTunes();
+
+  let sortingOption = $("#sort-select option:selected").val().trim();
+
+  if(sortingOption == "alphabetical" || sortingOption == "revalphabetical")
+  {
+    // hacky check to see if any search filter was actually applied
+    if(FilteredTunes.length != TuneIndex.length)
+    {
+      FilteredTunes.sort(function(a, b) {
+        return a.text > b.text;
+      });
+    }
+  }
+
+  if(sortingOption == "newest" || sortingOption == "oldest")
+  {
+    // hacky check to see if any search filter was actually applied
+    FilteredTunes.sort(function(a, b) {
+      return TuneIndex.tunes[b.idx].ctime - TuneIndex.tunes[a.idx].ctime;
+    });
+  }
+
+  if(sortingOption == "oldest" || sortingOption == "revalphabetical")
+  {
+    FilteredTunes.reverse();
+  }
 
   $("#tune-container").empty();
 

@@ -1,8 +1,9 @@
 "use strict";
 
-var TUNEBOOK_TEMPLATE = "printed_tunebook.tex"
+var TUNEBOOK_TEMPLATE = "printed_tunebook.textemplate"
 const fs = require('fs');
-const { exec } = require('child_process');
+const { exec, execSync } = require('child_process');
+const del = require('del');
 
 // returns the specified parameter of the ABC file as a string or a default value if it doesn't exist
 let GetABCParam = (abc, paramname, defaultValue = "", instance = 1) => {
@@ -33,7 +34,7 @@ let AutoTrim = (str) => {
   return str.trim().replace("*", "");
 };
 
-let ParseTune = (filepath) => {
+let ParseTune = (filepath, baseTime) => {
   return new Promise(function(resolve, reject) {
     fs.readFile(filepath, (err, data) => {
       if(err)
@@ -41,6 +42,23 @@ let ParseTune = (filepath) => {
         console.log("Error opening file : " + err);
         resolve(null);
       }
+
+      let stats = fs.lstatSync(filepath);
+      let cmd = "git log --reverse --format=%ai \"" + filepath + "\"";
+
+      let stdout = execSync(cmd) + "";
+      stdout = stdout.split('\n')[0];
+
+      let jsDate = new Date(stats.mtime.getTime());
+
+      let parts = stdout.split(' ');
+      if(parts.length == 3)
+      {
+        let str = parts[0] + "T" + parts[1] + parts[2];
+        jsDate = new Date(Date.parse(str));
+      }
+
+      let ctime = Math.floor((jsDate - baseTime) / 86400000);
 
       // convert data to a string
       let abc = data + '';
@@ -51,6 +69,7 @@ let ParseTune = (filepath) => {
         author:  AutoTrim(GetABCParam(abc, "C", "Anon.")),
         bars:  AutoTrim(GetABCParam(abc, "r", "0")),
         key: AutoTrim(GetABCParam(abc, "K", "")),
+        ctime: ctime,
         filename: filepath,
         abc:abc
       };
@@ -101,7 +120,7 @@ function GetAllTunes(dir)
   });
 }
 
-function ParseDirectoryRecursvie(dir)
+function ParseDirectoryRecursvie(dir, baseTime)
 {
   return new Promise(function(resolve, reject) {
     GetAllTunes(dir).then((tunes) => {
@@ -110,7 +129,7 @@ function ParseDirectoryRecursvie(dir)
 
       tunes.forEach(function(tune) {
         tunespromises.push(
-          ParseTune(tune).then((tuneobj) => {
+          ParseTune(tune, baseTime).then((tuneobj) => {
             if(tuneobj != null)
             {
               delete tuneobj.abc;
@@ -285,7 +304,7 @@ function GetTunesFromFilter(tunes, filter, only)
       }
 
       count++;
-      ParseTune(tunefilename).then((tune) => {
+      ParseTune(tunefilename, 0).then((tune) => {
         let result = eval(filter);
         tune.filename = tunefilename.substr(10);
         if(result === true)
@@ -403,41 +422,6 @@ function GenerateTunebook(allTunes, book)
       tex = tex.replace("%%{{INDEX}}%%", book.showIndex != false ? "\\printindex" : "");
 
       fs.writeFileSync(book.name + ".tex", tex);
-
-      const latex = exec('pdflatex -shell-escape -halt-on-error ' + book.name + ".tex");
-      let output = "";
-      latex.stdout.on('data', (data) => {
-        output += data.toString();
-      });
-      latex.stderr.on('data', (data) => {
-        output += data.toString();
-      });
-
-      latex.on('exit', (code) => {
-        if(code == 0)
-        {
-          const index = exec('makeindex -s indexstyle.ist ' + book.name);
-          index.on('exit', (code) => {
-            const latex = exec('pdflatex -shell-escape -halt-on-error ' + book.name + ".tex");
-
-            latex.on('exit', (code) => {
-              // Cleanup
-              fs.unlink(book.name + ".tex");
-              fs.unlink(book.name + ".log");
-              fs.unlink(book.name + ".ind");
-              fs.unlink(book.name + ".idx");
-              fs.unlink(book.name + ".ilg");
-              fs.unlink(book.name + ".aux");
-              fs.unlink(book.name + ".toc");
-            });
-          });
-        }
-        else
-        {
-          console.log("Latex Error:");
-          console.log(output);
-        }
-      });
     });
   });
 }
@@ -505,15 +489,29 @@ function CopyTunesWithExensions(tunes)
 // *****************************************************
 // *****************************************************
 
-
+var GenIndex = false;
 var GenBooks = false;
+var Clean = false;
 
 process.argv.forEach(function (val, index, array) {
-  if(val.toLowerCase() == "--books")
+  if(val.toLowerCase() == "books")
   {
     GenBooks = true;
   }
+  else if(val.toLowerCase() == "index")
+  {
+    GenIndex = true;
+  }
+  else if(val.toLowerCase() == "clean")
+  {
+    Clean = true;
+  }
 });
+
+if(Clean)
+{
+  del.sync(["*.tex", "*.toc", "*.pdf", "*.ilg", "*.idx", "*.fls", "*.fdb_latexmk", "*.ind", "*.log", "*.aux", "tmpstderror", "tmpstdout", "tunes.json", "out-abc.sh", "builttunes"]);
+}
 
 if(GenBooks)
 {
@@ -531,13 +529,55 @@ if(GenBooks)
         console.log(book.name);
         GenerateTunebook(tunes, book);
       });
+
+      if(files.length > 0)
+      {
+        const latex = exec('docker run --mount src=' + __dirname + ',target=/repo,type=bind strauman/travis-latexbuild:small');
+
+        let output = "";
+        latex.stdout.on('data', (data) => {
+          output += data.toString();
+        });
+        latex.stderr.on('data', (data) => {
+          output += data.toString();
+        });
+
+        latex.on('exit', (code) => {
+          if(code == 0)
+          {
+            // Cleanup
+            files.forEach(function(file) {
+              let book = JSON.parse(fs.readFileSync("books/" + file));
+
+              fs.unlink(book.name + ".tex");
+              fs.unlink(book.name + ".log");
+              fs.unlink(book.name + ".ind");
+              fs.unlink(book.name + ".idx");
+              fs.unlink(book.name + ".ilg");
+              fs.unlink(book.name + ".aux");
+              fs.unlink(book.name + ".toc");
+              fs.unlink(book.name + ".fdb_latexmk");
+              fs.unlink(book.name + ".fls");
+            });
+
+            console.log(output);
+          }
+          else
+          {
+            console.log("Latex Error:");
+            console.log(output);
+          }
+        });
+      }
     });
   });
 }
-else
+
+if(GenIndex)
 {
   console.log("Building tune database");
-  ParseDirectoryRecursvie("./tunes").then((tunes) => {
+  let baseTime = Date.now() - (Date.now() % 86400000);
+  ParseDirectoryRecursvie("./tunes", baseTime).then((tunes) => {
     tunes.sort(function(a,b) {
       if (a.title < b.title)
         return -1;
@@ -547,7 +587,7 @@ else
     });
 
     let obj = {
-      genTime: Date.now(),
+      genTime: baseTime ,
       tunes: tunes
     };
     fs.writeFile("./tunes.json", JSON.stringify(obj), () => {});
