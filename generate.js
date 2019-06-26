@@ -50,6 +50,11 @@ let SetABCHeader = (abc, header, value) => {
     outABC += newLine;
   });
 
+  if(!found)
+  {
+      outABC += header + ":" + value + "\n";
+  }
+
   return outABC;
 };
 
@@ -330,6 +335,7 @@ function GetTunesFromFilter(tunes, filter, only)
       ParseTune(tunefilename, 0).then((tune) => {
         let result = eval(filter);
         tune.filename = tunefilename.substr(10);
+        tune.type = tune.bars;
         if(result === true)
         {
           out.push(tune);
@@ -495,13 +501,22 @@ function CopyTunesWithExensions(tunes)
       streams++;
       let abc = fs.readFileSync(tune) + "";
       let comp = GetABCParam(abc, 'C');
-
       let key = GetABCParam(abc, 'K');
+      let rhythm = GetABCParam(abc, 'R');
+
+      key = key.toLowerCase();
+      key = key.charAt(0).toUpperCase() + key.slice(1);
       key = key.replace("maj", "");
       key = key.replace("min", "m");
+      key = key.replace("mixolydian", "mix");
+      key = key.replace("dorian", "dor");
+      key = key.replace("lydian", "lyd");
 
       abc = SetABCHeader(abc, 'C', key);
-      abc = SetABCHeader(abc, 'H', comp);
+      abc = SetABCHeader(abc, 'R', comp);
+      abc = SetABCHeader(abc, 'O', "");
+      abc = SetABCHeader(abc, 'Q', "");
+      abc = SetABCHeader(abc, 'r', rhythm);
 
       fs.writeFile(newpath, abc, () => {
         streams--;
