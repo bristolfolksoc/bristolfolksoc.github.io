@@ -30,6 +30,29 @@ let GetABCParam = (abc, paramname, defaultValue = "", instance = 1) => {
   return value;
 };
 
+let SetABCHeader = (abc, header, value) => {
+  let lines = abc.split('\n');
+  let outABC = "";
+  let found = false;
+
+  lines.forEach(function(line) {
+    let newLine = line;
+
+    if(line.startsWith(header))
+    {
+      newLine = header + ":" + value;
+      found = true;
+    }
+
+    if(outABC != "")
+      outABC += "\n";
+
+    outABC += newLine;
+  });
+
+  return outABC;
+};
+
 let AutoTrim = (str) => {
   return str.trim().replace("*", "");
 };
@@ -168,7 +191,7 @@ function RenderTunes(tunes)
       }
 
       renders++;
-      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --composerspace -0.65cm --pagescale 0.75 --staffscale 1.5 -q ' + tune);
+      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --pagescale 0.75 --staffscale 1.5 --infoname R --infoline 1 --infospace -0.45cm --aligncomposer -1 -q ' + tune);
 
       let output = "";
       abc_ps.stdout.on('data', (data) => {
@@ -470,9 +493,13 @@ function CopyTunesWithExensions(tunes)
       }
 
       streams++;
-      let ws = fs.createWriteStream(newpath);
-      fs.createReadStream(tune).pipe(ws);
-      ws.on('finish', () => {
+      let abc = fs.readFileSync(tune) + "";
+      let comp = GetABCParam(abc, 'C');
+      let key = GetABCParam(abc, 'K');
+      abc = SetABCHeader(abc, 'C', key);
+      abc = SetABCHeader(abc, 'R', comp);
+
+      fs.writeFile(newpath, abc, () => {
         streams--;
         if(streams == 0) resolve(newtunes);
       });
