@@ -40,8 +40,10 @@ let SetABCHeader = (abc, header, value) => {
 
     if(line.startsWith(header))
     {
-      newLine = header + ":" + value;
       found = true;
+      newLine = header + ":" + value;
+
+      if(value == "") return;
     }
 
     if(outABC != "")
@@ -50,7 +52,7 @@ let SetABCHeader = (abc, header, value) => {
     outABC += newLine;
   });
 
-  if(!found)
+  if(!found && value != "")
   {
       outABC += header + ":" + value + "\n";
   }
@@ -365,7 +367,7 @@ function GetAuthorsFromZ(zfield)
   });
 
   let authors = [];
-  let breakcharacters = /&|and|,|\./gi
+  let breakcharacters = /&|and |,|\./gi
   let parts = zfield.split(breakcharacters);
 
   parts.forEach(function(part) {
