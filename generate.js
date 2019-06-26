@@ -418,7 +418,7 @@ function GenerateTunebook(allTunes, book)
         {
           const index = exec('makeindex -s indexstyle.ist ' + book.name);
           index.on('exit', (code) => {
-            const latex = exec('pdflatex -shell-escape ' + book.name + ".tex");
+            const latex = exec('pdflatex -shell-escape -halt-on-error ' + book.name + ".tex");
 
             latex.on('exit', (code) => {
               // Cleanup
