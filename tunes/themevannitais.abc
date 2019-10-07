@@ -1,14 +1,14 @@
-X: 1
-T: Thème Vannitais
+X: 3
 T: Twiglet
+T: Thème Vannitais
 C: Tri Yann
 R: An Dro
-M: 4/4
-L: 1/8
+M: 2/4
+L: 1/16
 K: Emin
-Z: ABC transcription by Verge Roller
+Z: ABC transcription by Verge Roller & Hetzel 
 r: 32
-|: "Em" E2 B2  B2 AB | "Em" G2 E2 E4 | "D" A2 AG F2 FE | "D" DEFA G2 F2 |
-"Em" E2 B2  B2 AB | "Em" G2 E2 E4 | "D" A2 AG F2 FE | "D" DEFD  "Em" E4 :|
-|: "Em" EFGF EFGF | "Em" EFGA B2 E2 | "D" DEFE D2 DE | "D" F2 A2 G2 F2 |
-"Em" EFGF EFGF | "Em" EFGA B2 E2 | "D" DEFE D2 A2 | "D" G2 F2 "Em" E4 :|
+|: "Em" E2B2 B2AB | "Em" G2E2 E4 | "D" A2AG F2FE | "D" DEFA G2F2 |
+"Em" E2B2 B2AB | "Em" G2E2 E4 | "D" A2AG F2FE | "D" DEFD "Em" E4 :|
+|: "Em" EFGF EFGF | "Em" EFGA B2E2 | "D" DEFE D2DE | "D" F2A2 G2F2 |
+"Em" EFGF EFGF | "Em" EFGA B2E2 | "D" DEFE D2A2 | "D" G2F2 "Em" E4 :|
