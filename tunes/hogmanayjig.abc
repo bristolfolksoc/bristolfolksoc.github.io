@@ -5,13 +5,9 @@ R: Jig
 M: 6/8
 L: 1/8
 K: Dmaj
-Z: ABC transcription by Verge Roller
+Z: ABC transcription by Verge Roller, JH, Mackin
 r: 32
 de | "D" fgf fgf | "D" e2 d d2 e | " D"fgf fed | "Em" c2 B B2 B |
-"A" cdc cdc | "A" B2 A A2 ^G | "A" Ace a2 g | "D" g2 f f2 e |
-"D" fgf fgf | "D" e2 d d2 e | "D" fgf fed | "Em" c2 B B2 B |
-"A" cdc cdc | "A" B2 A A2 ^G | "A" Ace a2 c | "D" d3-d z e |]
-"D" f3 "A" e3 | "Bm" d3 "A" c3 | "Em" B2 B BAB | "A" c2 B Ace |
-"G" g2 g "D" f2 f | "Em" e2 e "D" d2 d | "A" c2 c "Em" BcB | "A" A2 A d2 e |
+"A" cdc cdc | "A" B2 A A2 A |1 "A" Ace a2 a | "D" g2 f f2 e :|2"A" Ace a2 c | "D" d3-d z e ||
 "D" f3 "A" e3 | "Bm" d3 "A" c3 | "G" B2 B BAB | "A" c2 B Ace |
-"G" g3 "D" f3 | "Em" e3 "D" d3 | "A" c2 c cBc | "D" d2-d  z  |]
+"G" g3 "D" f2 f | "Em" e3 "D" d3 |1 "A" c2 c "Em" BcB | "A" A2 A Ade :|2 "A" c2 c cBc | "D" d2-d z ||
