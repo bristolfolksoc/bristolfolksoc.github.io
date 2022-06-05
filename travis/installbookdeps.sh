@@ -4,6 +4,8 @@
 # - ps2eps : converts postscript to EPS
 # - eps2pdf : converts EPS to a pdf file (which can be rendered by latex)
 
+set -eu
+
 mkdir -p ./download
 
 cd download
@@ -32,11 +34,9 @@ if [ ! -d "ps2eps" ]; then
 
    cd ps2eps
 
-   rm -r ./bin/linux
-   rm -r ./bin/win32
-
+   mkdir -p ./bin/
    gcc -o ./bin/bbox ./src/C/bbox.c
-
+   tree ./bin
    chmod a+x ./bin/bbox
    chmod a+x ./bin/ps2eps
 

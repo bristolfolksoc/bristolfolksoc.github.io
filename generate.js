@@ -236,7 +236,7 @@ function RenderTunes(tunes)
           }
 
           output = "";
-          const eps_pdf = exec('epstopdf ' + epsfile);
+          const eps_pdf = exec('./epstopdf/epstopdf ' + epsfile);
           eps_pdf.stdout.on('data', (data) => {
             output += data.toString();
           });

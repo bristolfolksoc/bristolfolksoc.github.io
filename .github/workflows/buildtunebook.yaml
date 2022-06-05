@@ -1,0 +1,54 @@
+name: Build Tunebook
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Setup Environment
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: checks
+        run: |
+          echo "Hello"
+          tree
+
+      - name: cache npm
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: pre install
+        run: |
+          sudo apt install abcm2ps
+          abcm2ps -V
+          sudo apt install ps2eps
+          ps2eps -V
+          curl -L http://mirrors.ctan.org/support/epstopdf.zip -o ./epstopdf.zip
+          unzip ./epstopdf.zip
+          mv ./epstopdf/epstopdf.pl ./epstopdf/epstopdf
+          chmod a+x ./epstopdf/epstopdf
+          ./epstopdf/epstopdf -V
+          npm install
+
+      - name: create tunebook
+        run: |
+          node generate.js index
+          node generate.js books
+          npm test;
+
+      - name: deploy
+        run: |
+          ./travis/deploy.sh
