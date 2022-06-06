@@ -49,7 +49,7 @@ jobs:
           node generate.js books
           npm test;
 
-      - name: deploy
+      - name: deploy tunebook
         run: |
           mv node_modules/ node_modules_full/
           npm install --production
