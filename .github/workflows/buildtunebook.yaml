@@ -8,10 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Setup Environment
+    name: Build the tunebook
 
     steps:
-      - name: Checkout
+      - name: Check out tunebook
         uses: actions/checkout@v3
 
       - name: Setup Node
@@ -19,18 +19,16 @@ jobs:
         with:
           node-version: '16'
 
-      - name: checks
-        run: |
-          echo "Hello"
-          tree
-
-      - name: cache npm
+      - name: npm Caching
+        # We use node js packages stored in this repository keeping them
+        # reliable.
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: pre install
+      - name: install dependencies
+        # Build depends on three conversion scripts provided externally.
         run: |
           sudo apt install abcm2ps
           abcm2ps -V
@@ -50,6 +48,8 @@ jobs:
           npm test;
 
       - name: deploy tunebook
+        # This script sets up git for the deployment and commits the changes
+        # to the branch "master".
         run: |
           mv node_modules/ node_modules_full/
           npm install --production
