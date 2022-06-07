@@ -1,0 +1,65 @@
+name: Build Tunebook
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build the tunebook
+
+    steps:
+      - name: Check out tunebook
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: npm Caching
+        # We use node js packages stored in this repository keeping them
+        # reliable.
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: install dependencies
+        # Build depends on three conversion scripts provided externally.
+        run: |
+          sudo apt install abcm2ps
+          abcm2ps -V
+          sudo apt install ps2eps
+          ps2eps -V
+          curl -L http://mirrors.ctan.org/support/epstopdf.zip -o ./epstopdf.zip
+          unzip ./epstopdf.zip
+          mv ./epstopdf/epstopdf.pl ./epstopdf/epstopdf
+          chmod a+x ./epstopdf/epstopdf
+          ./epstopdf/epstopdf -V
+          npm install
+
+      - name: create tunebook
+        run: |
+          node generate.js index
+          node generate.js books
+          npm test;
+
+      - name: deploy tunebook
+        # This script sets up git for the deployment and commits the changes
+        # to the branch "master".
+        run: |
+          mv node_modules/ node_modules_full/
+          npm install --production
+          git config --global user.email "deploy@travis-ci.org"
+          git config --global user.name "Deployment Bot"
+          rm .gitignore
+          mv .gitignore-deploy .gitignore
+          git checkout -b master
+          git add -A
+          git commit -m "Build"
+          git remote add origin-pages https://git@github.com/wxtim/bristolfolksoc.github.io.git > /dev/null 2>&1
+          git push --quiet -f origin-pages master
+          mv node_modules_full/ node_modules/
