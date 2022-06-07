@@ -1,0 +1,22 @@
+name: Fast tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Run Tests
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install abcm2ps
+        run: |
+          sudo apt install abcm2ps
+
+      - name: test abcfiles
+        run: |
+          tests/test_abcsyntax.sh
